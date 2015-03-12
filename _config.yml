@@ -1,0 +1,17 @@
+title: "Benjamin A. Petersen | UX Developer in Raleigh, NC"
+description: ""
+url: "http://benjaminapetersen.me"
+twitter_username: bapetersen
+github_username:  benjaminapetersen
+permalink: /:title/
+baseurl: ""
+timezone: America/New_York
+kramdown:
+  input: GFM
+
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "default"
