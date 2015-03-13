@@ -2,20 +2,19 @@
 <html>
 
   {% include header.html %}
-
   <body>
+    <div class="wrapper">
+        <header>
+            <p class="date">{{ page.date | date: "%b %-d, %Y" }}</p>
+            <p class="back"><a href="{{ site.baseurl }}/">back</a></p>
+        </header>
 
-    <header>
-        <p class="title">{{ page.title }}</p>
-        <p class="date">{{ page.date | date: "%b %-d, %Y" }}</p>
-        <p class="back"><a href="{{ site.baseurl }}/">back</a></p>
-    </header>
-
-    <div class="content">
-        <article>
-        {{ content }}
-        </article>
+        <div class="content">
+            <article>
+            {{ content }}
+            </article>
+        </div>
+        {% include footer.html %}
     </div>
-    {% include footer.html %}
     </body>
 </html>
