@@ -1,0 +1,89 @@
+/* mobile first
+ ------------------------------------------ */
+@media only screen and (max-device-width: 480px) {
+    /* since mobile first... ignoring */
+}
+body {
+    background-color: #f5f5f5;
+}
+
+.wrapper {
+    margin: 0px auto 0px auto;
+}
+.content {
+    min-height: 100px;
+}
+/* sidebar
+ ------------------------------------------ */
+.sidebar {
+    background-color: #444;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+.sidebar h1,
+.sidebar h2,
+.sidebar h3,
+.sidebar h4,
+.sidebar h5 {
+    color: #fff;
+    margin: 5px 0px 5px 0px;
+}
+.sidebar p {
+    margin: 2px 0px 10px 0px
+}
+.sidebar .icon {
+    margin: 0px 5px;
+}
+.main {
+    margin: 25px 25px;
+}
+.footer {
+    margin: 10px;
+    display: none;
+}
+/* main
+ ------------------------------------------ */
+.main p {
+    margin-bottom: 25px;
+}
+
+/* decorative
+ ------------------------------------------ */
+.rounded {
+    border-radius: 300px;
+}
+
+.posts {}
+.post {
+    padding: 0px 0px 10px 0px;
+}
+.post .link {
+    padding: 0px;
+    margin: 0px;
+}
+.post .date {
+    border-bottom: 1px solid #DEDEDE;
+}
+
+.sidebar a:link {
+    color: #fff;
+}
+.sidebar a:hover,
+.sidebar a:focus {
+    text-decoration: none;
+}
+.sidebar a:visited {
+    color: #fff;
+}
+
+/* tablet & above
+ ------------------------------------------ */
+@media only screen and (min-width: 750px) {
+    .main {
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+

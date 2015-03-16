@@ -4,17 +4,27 @@
   {% include header.html %}
   <body>
     <div class="wrapper">
-        <header>
-            <p class="date">{{ page.date | date: "%b %-d, %Y" }}</p>
-            <p class="back"><a href="{{ site.baseurl }}/">back</a></p>
-        </header>
 
-        <div class="content">
-            <article>
-            {{ content }}
-            </article>
+        {% include sidebar.html %}
+
+        <div class="main">
+            <div class="content">
+                <p class="date">
+                    {{ page.date | date: "%b %-d, %Y" }}
+                </p>
+                <article>
+                {{ content }}
+                </article>
+            </div>
+
+            <div>
+                <p class="back">
+                    <a href="{{ site.baseurl }}/">back</a>
+                </p>
+            </div>
         </div>
         {% include footer.html %}
+
     </div>
     </body>
 </html>

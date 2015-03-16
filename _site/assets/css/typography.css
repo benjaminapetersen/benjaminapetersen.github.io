@@ -1,0 +1,59 @@
+/*
+    base typography
+    theme.css has some overrides as well...
+*/
+body {
+    color: #555e58;
+    font-family: 'Raleway', Arial, sans-serif;
+    font-weight: 300;
+}
+
+h1,h2,h3,h4,h5 {
+    color: #636b66;
+    font-weight: 500;
+    margin: 5px 0px 20px 0px;
+}
+h1 {
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4, h5 {
+    font-size: 14px;
+}
+
+.slabo27 {
+    font-family: 'Slabo 27px', serif;
+}
+
+p {
+    margin: 2px 0px 10px 0px;
+    line-height: 30px;
+}
+ul, ol {
+    margin: 2px 0px 15px 20px;
+    list-style-type: none;
+}
+ol {
+    list-style-type: decimal;
+}
+li {
+    margin: 2px 0px 10px 15px;
+}
+
+a:link {
+    text-decoration: none;
+    color: #555e58;
+}
+a:hover, a:focus {
+    text-decoration: underline;
+}
+a:visited {
+    color: #555e58;
+}
+
+

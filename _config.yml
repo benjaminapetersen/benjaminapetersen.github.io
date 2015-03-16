@@ -9,6 +9,7 @@ baseurl: ""
 timezone: America/New_York
 kramdown:
   input: GFM
+  hard_wrap: false
 
 defaults:
   -
