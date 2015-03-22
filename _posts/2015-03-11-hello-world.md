@@ -8,7 +8,7 @@ index:  1
 ### tl;dr
 
 Time to get my website back online using a static site generator called Jekyll
-&amp; a summary of my career history as first-post-fodder.
+&amp; a summary of my career history.
 
 # Intro Stuff, A Good Place To Start
 
