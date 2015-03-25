@@ -5,8 +5,8 @@
     <description></description>
     <link>http://benjaminapetersen.me/</link>
     <atom:link href="http://benjaminapetersen.me/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 25 Mar 2015 00:11:40 -0400</pubDate>
-    <lastBuildDate>Wed, 25 Mar 2015 00:11:40 -0400</lastBuildDate>
+    <pubDate>Wed, 25 Mar 2015 00:15:46 -0400</pubDate>
+    <lastBuildDate>Wed, 25 Mar 2015 00:15:46 -0400</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
@@ -36,8 +36,10 @@ The &lt;a href=&quot;https://github.com/angular/material&quot; target=&quot;_bla
 &lt;h1 id=&quot;layout-attributes&quot;&gt;Layout Attributes?&lt;/h1&gt;
 
 &lt;p&gt;I’m obviously talking about html.  Layout attributes provide an interesting way to give the html
-an extra job.  Essentially we extract layout from our css, using classes for theme or skin, but
-letting the HTML itself describe the basic layout.  And now for the caveat…&lt;/p&gt;
+an extra job.  Essentially we extract layout from our CSS, using classes for theme or skin, but
+letting the HTML itself describe the basic layout.  The Angular Material library has already done the
+grunt work for this, I believe taking its cue from Polymer.  The two libraries are subtly different
+in the layout attributes provided, but in the end they meet the same goals.&lt;/p&gt;
 
 &lt;h2 id=&quot;but-semantic-html&quot;&gt;But… semantic HTML?!?!&lt;/h2&gt;
 

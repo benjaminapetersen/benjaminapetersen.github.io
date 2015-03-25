@@ -30,8 +30,10 @@ The [Angular Material](https://github.com/angular/material){:target="_blank"}{:t
 # Layout Attributes?
 
 I'm obviously talking about html.  Layout attributes provide an interesting way to give the html
-an extra job.  Essentially we extract layout from our css, using classes for theme or skin, but
-letting the HTML itself describe the basic layout.  And now for the caveat...
+an extra job.  Essentially we extract layout from our CSS, using classes for theme or skin, but
+letting the HTML itself describe the basic layout.  The Angular Material library has already done the
+grunt work for this, I believe taking its cue from Polymer.  The two libraries are subtly different
+in the layout attributes provided, but in the end they meet the same goals.
 
 ## But... semantic HTML?!?!
 
