@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <title>
+    
+        Layout attribs, Angular Material & Polymer - Benjamin A. Petersen | UX Developer in Raleigh, NC
+    
+    </title>
+    <meta name="viewport" content="width=device-width">
+    
+    <meta name="description" content="">
+    
+
+    <link href='http://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/css/reset.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/typography.css">
+    <link rel="stylesheet" href="/assets/css/icons.css">
+    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/css/syntax-highlight.css">
+</head>
+
+  <body>
+    <div class="wrapper">
+
+        <div id="sidebar" class="sidebar">
+    <header>
+        <img
+            src="/assets/img/bap.jpg"
+            class="rounded">
+        <h1 class="slabo27">Benjamin A. Petersen</h1>
+        <p class="slabo27">UX Developer</p>
+
+        <a href="https://github.com/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-github"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-linkedin"></span>
+        </a>
+        <a href="https://twitter.com/bapetersen"
+           target="_blank">
+            <span class="icon icon-twitter3"></span>
+        </a>
+    </header>
+</div>
+
+
+        <div class="main">
+            <div class="content">
+                <p class="date">
+                    Mar 24, 2015
+                </p>
+                <article>
+                <link href="/assets/bower/angular-material/angular-material.css" rel="stylesheet" />
+
+<style>
+
+.outline {
+    outline: 1px solid #990000;
+}
+
+.p10,
+[p10] {
+    padding: 10px;
+}
+</style>
+
+<h3 id="tldr">tl;dr</h3>
+
+<p>One thing I really enjoyed about
+<a href="https://www.polymer-project.org/0.5/" target="_blank" title="Polymer Web Components">Polymer</a>
+was using attributes for layout (via
+<a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/" target="_blank" title="A Complete Guide to Flexbox">flexbox</a>).
+The <a href="https://github.com/angular/material" target="_blank" title="Material Design for Angular">Angular Material</a> library provides a very similar approach.</p>
+
+<h1 id="layout-attributes">Layout Attributes?</h1>
+
+<p>I’m obviously talking about html.  Layout attributes provide an interesting way to give the html
+an extra job.  Essentially we extract layout from our css, using classes for theme or skin, but
+letting the HTML itself describe the basic layout.  And now for the caveat…</p>
+
+<h2 id="but-semantic-html">But… semantic HTML?!?!</h2>
+
+<p>I’m all for semantics html in the appropriate context.  Back in the day when I was first getting into
+web development, <a href="http://www.csszengarden.com/" target="_blank">CSS Zen Garden</a> was the greatest site
+out there.  It showcased a single html file with over a hundred different css files that completely
+changed the look and feel of the page.  Having this kind of separation of html &amp; is extremely
+valuable… if the product of your website is content (text) and you need to freshen up the skin
+every year or two.</p>
+
+<h2 id="application-development-isnt-about-text">Application Development Isn’t About Text</h2>
+
+<p>Application development is a whole different animal.  The product is typically a service, not content.
+In this world, the html is throw away, markup that mainly serves the purpose of gluing functionality
+together.  The JavaScript and CSS are the components that take the most time to develop.  Finding ways
+to make the HTML meaningful, reducing JavaScript &amp; CSS to maintain is a big win.</p>
+
+<h2 id="a-simple-layout">A Simple Layout</h2>
+
+<p>Simply getting a few divs to line up in a row has been historically far trickier than it should be.
+It can be accomplished with floats, inline-block styles, and other tricks, but flex based layout
+is finally making it simple to get html to do what we’ve always wanted it to do.  Take this example,
+adding only the <a href="https://github.com/angular/material/blob/master/src/core/style/layout.scss" target="_blank">Angular Material CSS file</a>:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">layout=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div&gt;</span> left block <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">flex</span><span class="nt">&gt;</span> center block <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div&gt;</span>right block <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
+
+<p>It produces this (with some outlines added to the divs):</p>
+
+<div class="p">
+    <div layout="row" class="outline">
+        <div class="outline"> left block </div>
+        <div flex="" class="outline"> center block </div>
+        <div class="outline">right block </div>
+    </div>
+</div>
+
+<p>Its not pretty yet, but with two simple attributes on our HTML we have the standard website layout
+with a center, left and right column.  How does this work?  Well, the <code>layout="row"</code> attribute
+on the outer div changes everything.  Using flexbox, the css rule <code>flex-direction: row;</code> (vendor
+prefixes ignored) is applied.  This sets up the main axis to be horizontal, causing the child divs to
+line up left to right.</p>
+
+<p>The <code>flex</code> attribute added to the div in the center is pretty neat.  It applies
+<code>flex: 1</code> to this div, which basically just says “fill up the extra space”.  No width set.
+Its a “blocky” kind of element, will not collapse but also will not expand to take up the whole area.
+It “knows” how to expand enough to swallow up all the extra pixels left over by it’s siblings (which
+take up only the space needed by their content).</p>
+
+<p>But what about the spacing?  In the old float days, adding padding or margin to a floated div would
+break the layout.  The simplest way to do this was to nest divs or p tags within the parent layout,
+applying styles to these components.  With flexbox, the math is taken care of for us.  i’m going to add
+a class that will add an arbitrary 10px of padding to all of the divs:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;style&gt;</span>
+<span class="nc">.p10</span> <span class="p">{</span>
+    <span class="k">padding</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">&lt;/style&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">layout=</span><span class="s">&quot;row&quot;</span> <span class="na">class=</span><span class="s">&quot;p10&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;p10&quot;</span><span class="nt">&gt;</span> left block <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">flex</span> <span class="na">class=</span><span class="s">&quot;p10&quot;</span><span class="nt">&gt;</span> center block <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;p10&quot;</span><span class="nt">&gt;</span>right block <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
+
+<p>Which produces:</p>
+
+<div class="p">
+    <div layout="row" class="p10 outline">
+        <div class="p10 outline"> left block </div>
+        <div flex="" class="p10 outline"> center block </div>
+        <div class="p10 outline">right block </div>
+    </div>
+</div>
+
+<p>Whoa.  No math.  No need to figure out width + padding + margin (don’t forget to add padding and
+margin px twice since they are added to both sides) to ensure your floats don’t explode.  Flexbox
+allows us to trust the browser to do the math.  The padding is applied to the divs, and then the
+browser simply adjust everything to fit the given space.  Even the padding on the parent is taken
+into account!  This is so much less brittle.</p>
+
+<h2 id="adding-our-own-attributes">Adding Our Own Attributes</h2>
+
+<p>So far, the attributes used are those provided by Angular Material. But it could be argued that the
+10 pixel padding is really for layout purposes.  Therefore, we can change <code>.p10 { padding: 10px}</code>
+to <code>[p10] { padding: 10px}</code> to make it a layout attribute as well.  The markup would look like:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;style&gt;</span>
+<span class="o">[</span><span class="nt">p10</span><span class="o">]</span> <span class="p">{</span>
+    <span class="k">padding</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">&lt;/style&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">layout=</span><span class="s">&quot;row&quot;</span> <span class="na">p10</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">p10</span><span class="nt">&gt;</span> left block <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">flex</span> <span class="na">p10</span><span class="nt">&gt;</span> center block <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">p10</span><span class="nt">&gt;</span>right block <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
+
+<p>And the results:</p>
+
+<div class="p">
+    <div layout="row" p10="" class="outline">
+        <div p10="" class="outline"> left block </div>
+        <div p10="" flex="" class="outline"> center block </div>
+        <div p10="" class="outline">right block </div>
+    </div>
+</div>
+
+<p>When we drop the <code>class="p10"</code> and replace it with the <code>p10</code> attribute,
+the markup becomes much more readable, and our HTML is now clearly declaring the layout to us.
+This is very simple, and very powerful.</p>
+
+<p>This post really only scratches the surface of flexbox and attributes.  I’m sure many will still
+hate the idea of dirtying up HTML by marrying it to the layout, but in my app development experience,
+it is much more satisfying to tweak a few layout attirbutes to make subtle changes to components than
+it is to fuss with the cascade of CSS.  CSS has its place, certainly, but I like the approach because
+it leaves the framing in the html and lets the CSS control the paint job.</p>
+
+
+                </article>
+            </div>
+
+            <div>
+                <p class="back">
+                    <a href="/">back</a>
+                </p>
+            </div>
+        </div>
+        <footer class="footer">
+    <p>Github <a href="https://github.com/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+    <p>Twitter <a href="https://twitter.com/bapetersen"
+        target="_blank">bapetersen</a></p>
+    <p>Linkedin <a href="https://www.linkedin.com/in/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-15819385-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+    </div>
+    </body>
+</html>

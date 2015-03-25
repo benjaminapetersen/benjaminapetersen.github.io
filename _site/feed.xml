@@ -5,9 +5,169 @@
     <description></description>
     <link>http://benjaminapetersen.me/</link>
     <atom:link href="http://benjaminapetersen.me/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 18 Mar 2015 14:23:17 -0400</pubDate>
-    <lastBuildDate>Wed, 18 Mar 2015 14:23:17 -0400</lastBuildDate>
+    <pubDate>Wed, 25 Mar 2015 00:11:40 -0400</pubDate>
+    <lastBuildDate>Wed, 25 Mar 2015 00:11:40 -0400</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
+    
+      <item>
+        <title>Layout attribs, Angular Material &amp; Polymer</title>
+        <description>&lt;link href=&quot;/assets/bower/angular-material/angular-material.css&quot; rel=&quot;stylesheet&quot; /&gt;
+
+&lt;style&gt;
+
+.outline {
+    outline: 1px solid #990000;
+}
+
+.p10,
+[p10] {
+    padding: 10px;
+}
+&lt;/style&gt;
+
+&lt;h3 id=&quot;tldr&quot;&gt;tl;dr&lt;/h3&gt;
+
+&lt;p&gt;One thing I really enjoyed about
+&lt;a href=&quot;https://www.polymer-project.org/0.5/&quot; target=&quot;_blank&quot; title=&quot;Polymer Web Components&quot;&gt;Polymer&lt;/a&gt;
+was using attributes for layout (via
+&lt;a href=&quot;https://css-tricks.com/snippets/css/a-guide-to-flexbox/&quot; target=&quot;_blank&quot; title=&quot;A Complete Guide to Flexbox&quot;&gt;flexbox&lt;/a&gt;).
+The &lt;a href=&quot;https://github.com/angular/material&quot; target=&quot;_blank&quot; title=&quot;Material Design for Angular&quot;&gt;Angular Material&lt;/a&gt; library provides a very similar approach.&lt;/p&gt;
+
+&lt;h1 id=&quot;layout-attributes&quot;&gt;Layout Attributes?&lt;/h1&gt;
+
+&lt;p&gt;I’m obviously talking about html.  Layout attributes provide an interesting way to give the html
+an extra job.  Essentially we extract layout from our css, using classes for theme or skin, but
+letting the HTML itself describe the basic layout.  And now for the caveat…&lt;/p&gt;
+
+&lt;h2 id=&quot;but-semantic-html&quot;&gt;But… semantic HTML?!?!&lt;/h2&gt;
+
+&lt;p&gt;I’m all for semantics html in the appropriate context.  Back in the day when I was first getting into
+web development, &lt;a href=&quot;http://www.csszengarden.com/&quot; target=&quot;_blank&quot;&gt;CSS Zen Garden&lt;/a&gt; was the greatest site
+out there.  It showcased a single html file with over a hundred different css files that completely
+changed the look and feel of the page.  Having this kind of separation of html &amp;amp; is extremely
+valuable… if the product of your website is content (text) and you need to freshen up the skin
+every year or two.&lt;/p&gt;
+
+&lt;h2 id=&quot;application-development-isnt-about-text&quot;&gt;Application Development Isn’t About Text&lt;/h2&gt;
+
+&lt;p&gt;Application development is a whole different animal.  The product is typically a service, not content.
+In this world, the html is throw away, markup that mainly serves the purpose of gluing functionality
+together.  The JavaScript and CSS are the components that take the most time to develop.  Finding ways
+to make the HTML meaningful, reducing JavaScript &amp;amp; CSS to maintain is a big win.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-simple-layout&quot;&gt;A Simple Layout&lt;/h2&gt;
+
+&lt;p&gt;Simply getting a few divs to line up in a row has been historically far trickier than it should be.
+It can be accomplished with floats, inline-block styles, and other tricks, but flex based layout
+is finally making it simple to get html to do what we’ve always wanted it to do.  Take this example,
+adding only the &lt;a href=&quot;https://github.com/angular/material/blob/master/src/core/style/layout.scss&quot; target=&quot;_blank&quot;&gt;Angular Material CSS file&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;layout=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;row&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt; left block &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;flex&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; center block &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;right block &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It produces this (with some outlines added to the divs):&lt;/p&gt;
+
+&lt;div class=&quot;p&quot;&gt;
+    &lt;div layout=&quot;row&quot; class=&quot;outline&quot;&gt;
+        &lt;div class=&quot;outline&quot;&gt; left block &lt;/div&gt;
+        &lt;div flex=&quot;&quot; class=&quot;outline&quot;&gt; center block &lt;/div&gt;
+        &lt;div class=&quot;outline&quot;&gt;right block &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Its not pretty yet, but with two simple attributes on our HTML we have the standard website layout
+with a center, left and right column.  How does this work?  Well, the &lt;code&gt;layout=&quot;row&quot;&lt;/code&gt; attribute
+on the outer div changes everything.  Using flexbox, the css rule &lt;code&gt;flex-direction: row;&lt;/code&gt; (vendor
+prefixes ignored) is applied.  This sets up the main axis to be horizontal, causing the child divs to
+line up left to right.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;flex&lt;/code&gt; attribute added to the div in the center is pretty neat.  It applies
+&lt;code&gt;flex: 1&lt;/code&gt; to this div, which basically just says “fill up the extra space”.  No width set.
+Its a “blocky” kind of element, will not collapse but also will not expand to take up the whole area.
+It “knows” how to expand enough to swallow up all the extra pixels left over by it’s siblings (which
+take up only the space needed by their content).&lt;/p&gt;
+
+&lt;p&gt;But what about the spacing?  In the old float days, adding padding or margin to a floated div would
+break the layout.  The simplest way to do this was to nest divs or p tags within the parent layout,
+applying styles to these components.  With flexbox, the math is taken care of for us.  i’m going to add
+a class that will add an arbitrary 10px of padding to all of the divs:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;style&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;.p10&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;layout=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;row&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;p10&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;p10&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; left block &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;flex&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;p10&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; center block &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;p10&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;right block &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Which produces:&lt;/p&gt;
+
+&lt;div class=&quot;p&quot;&gt;
+    &lt;div layout=&quot;row&quot; class=&quot;p10 outline&quot;&gt;
+        &lt;div class=&quot;p10 outline&quot;&gt; left block &lt;/div&gt;
+        &lt;div flex=&quot;&quot; class=&quot;p10 outline&quot;&gt; center block &lt;/div&gt;
+        &lt;div class=&quot;p10 outline&quot;&gt;right block &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Whoa.  No math.  No need to figure out width + padding + margin (don’t forget to add padding and
+margin px twice since they are added to both sides) to ensure your floats don’t explode.  Flexbox
+allows us to trust the browser to do the math.  The padding is applied to the divs, and then the
+browser simply adjust everything to fit the given space.  Even the padding on the parent is taken
+into account!  This is so much less brittle.&lt;/p&gt;
+
+&lt;h2 id=&quot;adding-our-own-attributes&quot;&gt;Adding Our Own Attributes&lt;/h2&gt;
+
+&lt;p&gt;So far, the attributes used are those provided by Angular Material. But it could be argued that the
+10 pixel padding is really for layout purposes.  Therefore, we can change &lt;code&gt;.p10 { padding: 10px}&lt;/code&gt;
+to &lt;code&gt;[p10] { padding: 10px}&lt;/code&gt; to make it a layout attribute as well.  The markup would look like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;style&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;p10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;layout=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;row&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p10&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p10&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; left block &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;flex&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p10&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; center block &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p10&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;right block &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And the results:&lt;/p&gt;
+
+&lt;div class=&quot;p&quot;&gt;
+    &lt;div layout=&quot;row&quot; p10=&quot;&quot; class=&quot;outline&quot;&gt;
+        &lt;div p10=&quot;&quot; class=&quot;outline&quot;&gt; left block &lt;/div&gt;
+        &lt;div p10=&quot;&quot; flex=&quot;&quot; class=&quot;outline&quot;&gt; center block &lt;/div&gt;
+        &lt;div p10=&quot;&quot; class=&quot;outline&quot;&gt;right block &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;When we drop the &lt;code&gt;class=&quot;p10&quot;&lt;/code&gt; and replace it with the &lt;code&gt;p10&lt;/code&gt; attribute,
+the markup becomes much more readable, and our HTML is now clearly declaring the layout to us.
+This is very simple, and very powerful.&lt;/p&gt;
+
+&lt;p&gt;This post really only scratches the surface of flexbox and attributes.  I’m sure many will still
+hate the idea of dirtying up HTML by marrying it to the layout, but in my app development experience,
+it is much more satisfying to tweak a few layout attirbutes to make subtle changes to components than
+it is to fuss with the cascade of CSS.  CSS has its place, certainly, but I like the approach because
+it leaves the framing in the html and lets the CSS control the paint job.&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 24 Mar 2015 00:00:00 -0400</pubDate>
+        <link>http://benjaminapetersen.me/layout-attribs/</link>
+        <guid isPermaLink="true">http://benjaminapetersen.me/layout-attribs/</guid>
+        
+        
+      </item>
     
       <item>
         <title>Getting Started With Jekyll</title>
@@ -26,7 +186,7 @@ on the home page… because a single link is lame, yo.&lt;/p&gt;
         <description>&lt;h3 id=&quot;tldr&quot;&gt;tl;dr&lt;/h3&gt;
 
 &lt;p&gt;Time to get my website back online using a static site generator called Jekyll
-&amp;amp; a summary of my career history as first-post-fodder.&lt;/p&gt;
+&amp;amp; a summary of my career history.&lt;/p&gt;
 
 &lt;h1 id=&quot;intro-stuff-a-good-place-to-start&quot;&gt;Intro Stuff, A Good Place To Start&lt;/h1&gt;
 

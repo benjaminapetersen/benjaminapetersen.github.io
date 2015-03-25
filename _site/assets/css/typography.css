@@ -8,6 +8,10 @@ body {
     font-weight: 300;
 }
 
+code {
+    color: #555e58;
+}
+
 h1,h2,h3,h4,h5 {
     color: #636b66;
     font-weight: 500;

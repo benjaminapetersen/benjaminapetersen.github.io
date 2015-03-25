@@ -1,0 +1,14 @@
+{
+  "name": "benjaminapetersen.github.io",
+  "version": "0.0.1",
+  "homepage": "https://github.com/benjaminapetersen/benjaminapetersen.github.io",
+  "authors": [
+    "Benjamin A. Petersen <ben@benjaminapetersen.me>"
+  ],
+  "description": "bap.me personal blog dependency management",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular-material": "~0.8.3"
+  }
+}
