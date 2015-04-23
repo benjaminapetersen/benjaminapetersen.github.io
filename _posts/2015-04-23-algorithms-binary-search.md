@@ -8,7 +8,7 @@ index: 3
 ### tl;dr
 
 I'm working through the book
-[Grokking Algorithms]('http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230'){:target="_blank"}{:title="Grokking Algorithms"} and sharing my implementation of binary search.
+[Grokking Algorithms]('http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230'){:target="_blank"}{:title="Grokking Algorithms"} and sharing my implementation of binary search written in JavaScript.
 
 # Algorithms Are Just Step By Step Problem Solving Methods.
 
