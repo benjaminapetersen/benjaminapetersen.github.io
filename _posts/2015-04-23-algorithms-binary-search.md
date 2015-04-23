@@ -8,9 +8,9 @@ index: 3
 ### tl;dr
 
 I'm working through the book
-[Grokking Algorithms](http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230){:target="_blank"}{:title="Grokking Algorithms"} and sharing my implementation of binary search written in JavaScript.
+[Grokking Algorithms](http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230){:target="_blank"}{:title="Grokking Algorithms"} by Aditya Bhargava.
 
-# Algorithms Are Just Step By Step Problem Solving Methods.
+# Algorithms... sounds fun.  Er, something.
 
 As someone who has come into a career in software development through unconventional means, I find
 myself intrigued by the many things I miseed out on by not pursuing a CS or CE degree back in my college
