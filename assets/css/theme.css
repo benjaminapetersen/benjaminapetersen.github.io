@@ -7,14 +7,14 @@ body {
     background-color: #f5f5f5;
 }
 
+/* pygments provides actual theme for code blocks */
 pre {
-    background-color: #f5f6f5;
+    background-color: #444;
     padding: 20px;
     border: 1px solid #ccc;
     overflow-y: scroll;
 }
 code {
-    background-color: #f5f6f5;
     font-family: monospace, serif;
 }
 
