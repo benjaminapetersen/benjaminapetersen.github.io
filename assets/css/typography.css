@@ -51,13 +51,13 @@ li {
 
 a:link {
     text-decoration: none;
-    color: #555e58;
+    color: #0086B3;
 }
 a:hover, a:focus {
     text-decoration: underline;
 }
 a:visited {
-    color: #555e58;
+    color: #009DD2;
 }
 
 
