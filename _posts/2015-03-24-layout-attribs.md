@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2015-03-24
-title: "Layout attribs, Angular Material & Polymer"
+title: "Layout attribs, Angular Material & Polymer, Pt 1"
 index: 3
 ---
 
@@ -168,4 +168,8 @@ hate the idea of dirtying up HTML by marrying it to the layout, but in my app de
 it is much more satisfying to tweak a few layout attirbutes to make subtle changes to components than
 it is to fuss with the cascade of CSS.  CSS has its place, certainly, but I like the approach because
 it leaves the framing in the html and lets the CSS control the paint job.
+
+This is a rather trivial example, but I'm going to try to keep my posts short to ensure I regularly
+post.  Stay tuned for a part 2 in the future where I'll attempt to something sufficiently complex
+to make this convincing.
 
