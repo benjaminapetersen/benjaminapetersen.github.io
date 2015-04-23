@@ -11,6 +11,7 @@ pre {
     background-color: #f5f6f5;
     padding: 20px;
     border: 1px solid #ccc;
+    overflow-y: scroll;
 }
 code {
     background-color: #f5f6f5;
