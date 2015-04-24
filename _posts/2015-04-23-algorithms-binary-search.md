@@ -5,17 +5,12 @@ title: "Algorithms, Binary Search in JavaScript"
 index: 3
 ---
 
-### tl;dr
-
-I'm working through the book
-[Grokking Algorithms](http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230){:target="_blank"}{:title="Grokking Algorithms"} by Aditya Bhargava.
-
 # Algorithms... sounds fun.  Er, something.
 
 As someone who has come into a career in software development through unconventional means, I find
-myself intrigued by the many things I miseed out on by not pursuing a CS or CE degree back in my college
-days.  Currently Algorithms are at the top of my list of Curous Things I Want To Explore.  I'm working
-through the book Grokking Algorithms by Aditya Bhargava.  Bhargava is a good teacher, making use of illustrations
+myself intrigued by the many things I missed out on by not pursuing a CS or CE degree back in my college
+days.  Currently Algorithms are at the top of my list of Curious Things I Want To Explore. I'm working through the book
+[Grokking Algorithms](http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230){:target="_blank"}{:title="Grokking Algorithms"} by Aditya Bhargava.  Bhargava is a good teacher, making use of illustrations
 and clear explanations, ensuring a topic that could be dry and painful stays interesting.
 
 ## Binary Search
@@ -42,7 +37,7 @@ Thirty two!  Thats a pretty amazing improvement.
 
 The function is rather simple.  If the sorted list is 4 billion items long, check the middle item.  If the guess is right, win.
 If too high, throw away everything higher. If too low, throw away everything lower. Bam! We now only have 2 billion to go, cutting.  the list in half.  Repeat and there goes another billion, cutting the list in half again.  The next round trims 500 million.
-With this algorithm we are able to quickly hone in onto a very small subset of the list to determine if the item we want exists.
+With this algorithm we are able to quickly hone in on to a very small subset of the list to determine if the item we want exists.
 
 ## Is it practical?
 
@@ -98,7 +93,7 @@ And an example of it's use:
 
 // a function to generate a list of numbers
 var numbers = makeNumberList(0, 1000);
-// a hard coded list of states
+// a hardcoded list of states
 var states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
 
 console.log(binarySearch(numbers, 995)); // returns 995, the index of the number 995 in the list.
@@ -108,5 +103,6 @@ console.log(binarySearch(states, 'Michigan')); // returns 20, the index of the s
 
 And that's about it.  This is a first pass, so I'm sure ill tinker with it and think of a better solution, but more than
 likely my next post will be on another algorithm rather than an update to this one.
+
 
 
