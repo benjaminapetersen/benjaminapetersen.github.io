@@ -1,19 +1,17 @@
 ---
 layout: post
 date: 2015-04-23
-title: "Algorithms, Binary Search in JavaScript"
+title: "Algorithms 101 - Binary Search"
 index: 3
 ---
 
-# Algorithms... sounds fun.  Er, something.
+# Algorithms 101 - Binary Search
 
 As someone who has come into a career in software development through unconventional means, I find
 myself intrigued by the many things I missed out on by not pursuing a CS or CE degree back in my college
 days.  Currently Algorithms are at the top of my list of Curious Things I Want To Explore. I'm working through the book
 [Grokking Algorithms](http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230){:target="_blank"}{:title="Grokking Algorithms"} by Aditya Bhargava.  Bhargava is a good teacher, making use of illustrations
 and clear explanations, ensuring a topic that could be dry and painful stays interesting.
-
-## Binary Search
 
 The first algorithm in the book is binary search.  Binary search is simply a way to find an item in a list in
 the most efficient way possible.  The catch is that the list must be sorted to be effective (1,2,3,4,5, not 5,3,4,2,1).  With a sorted list (sorted is required for this to work), the algorithm is simple.  Guess the halfway point of the list.  If the guess
