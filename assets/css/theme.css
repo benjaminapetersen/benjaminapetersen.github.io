@@ -90,6 +90,24 @@ code {
     color: #fff;
 }
 
+/* books
+ ------------------------------------------ */
+
+.book {
+    width: 200px;
+    height: auto;
+}
+.img-in-text {
+    vertical-align: middle;
+    display: block;
+    margin: 0px auto;
+    padding: 25px;
+}
+.f-left,
+.f-right {
+    clear: both;
+}
+
 /* tablet & above
  ------------------------------------------ */
 @media only screen and (min-width: 750px) {
@@ -97,6 +115,16 @@ code {
         max-width: 700px;
         margin-left: auto;
         margin-right: auto;
+    }
+    /* images floating left and right in text only apply to larger than phone sizes */
+    .img-in-text {
+        display: inline-block;
+    }
+    .f-right {
+        float: right;
+    }
+    .f-left {
+        float: left;
     }
 }
 

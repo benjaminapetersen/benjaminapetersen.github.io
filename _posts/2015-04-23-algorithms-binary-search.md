@@ -8,6 +8,7 @@ index: 3
 
 # Algorithms 101 - Binary Search
 
+<img class="book img-in-text f-right" src="{{'/assets/img/book_grokking_algorithms.jpg' | prepend: site.baseurl}}" />
 As someone who has come into a career in software development through unconventional means, I find
 myself intrigued by the many things I missed out on by not pursuing a CS/CE degree back in my college
 days.  Currently Algorithms are at the top of my list of Curious Things I Want To Explore.  I recently began
