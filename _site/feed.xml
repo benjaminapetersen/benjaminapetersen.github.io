@@ -5,73 +5,82 @@
     <description></description>
     <link>http://benjaminapetersen.me/</link>
     <atom:link href="http://benjaminapetersen.me/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 23 Apr 2015 16:24:25 -0400</pubDate>
-    <lastBuildDate>Thu, 23 Apr 2015 16:24:25 -0400</lastBuildDate>
+    <pubDate>Fri, 24 Apr 2015 22:27:29 -0400</pubDate>
+    <lastBuildDate>Fri, 24 Apr 2015 22:27:29 -0400</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
-        <title>Algorithms, Binary Search in JavaScript</title>
-        <description>&lt;h3 id=&quot;tldr&quot;&gt;tl;dr&lt;/h3&gt;
-
-&lt;p&gt;I’m working through the book
-&lt;a href=&quot;http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230&quot; target=&quot;_blank&quot; title=&quot;Grokking Algorithms&quot;&gt;Grokking Algorithms&lt;/a&gt; and sharing my implementation of binary search written in JavaScript.&lt;/p&gt;
-
-&lt;h1 id=&quot;algorithms-are-just-step-by-step-problem-solving-methods&quot;&gt;Algorithms Are Just Step By Step Problem Solving Methods.&lt;/h1&gt;
+        <title>Algorithms 101 - Binary Search</title>
+        <description>&lt;h1 id=&quot;algorithms-101---binary-search&quot;&gt;Algorithms 101 - Binary Search&lt;/h1&gt;
 
 &lt;p&gt;As someone who has come into a career in software development through unconventional means, I find
-myself intrigued by the many things I miseed out on by not pursuing a CS or CE degree back in my college
-days.  Currently Algorithms are at the top of my list of Curous Things I Want To Explore.  I’m working
-through the book Grokking Algorithms by Aditya Bhargava.  Bhargava is a good teacher, making use of illustrations
-and clear explanations, ensuring a topic that could be dry and painful stays interesting.&lt;/p&gt;
+myself intrigued by the many things I missed out on by not pursuing a CS/CE degree back in my college
+days.  Currently Algorithms are at the top of my list of Curious Things I Want To Explore.  I recently began
+working through the book
+&lt;a href=&quot;http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230&quot; target=&quot;_blank&quot; title=&quot;Grokking Algorithms&quot;&gt;Grokking Algorithms&lt;/a&gt;
+by Aditya Bhargava in order to dive into the topic of algorithms.&lt;/p&gt;
 
-&lt;h2 id=&quot;binary-search&quot;&gt;Binary Search&lt;/h2&gt;
+&lt;p&gt;The first algorithm in the book is binary search.  Binary search is simply a way to find an item in a
+list in as few steps as possible.  The point?  Efficiency. We want to efficiently search extremely large
+data sets without needing to iterate over every single item in the list.&lt;/p&gt;
 
-&lt;p&gt;The first algorithm in the book is binary search.  Binary search is simply a way to find an item in a list in
-the most efficient way possible.  The catch is that the list must be sorted to be effective (1,2,3,4,5, not 5,3,4,2,1).  With a sorted list (sorted is required for this to work), the algorithm is simple.  Guess the halfway point of the list.  If the guess
-is too large, ignore everything above.  If the guess is too small, ignore everything below.  Repeat until you
-find the item, otherwise return nothing.&lt;/p&gt;
+&lt;h2 id=&quot;the-catch&quot;&gt;The Catch&lt;/h2&gt;
 
-&lt;p&gt;Basically, a binary search needs to find the index of the searched item in as few guesses as possible. If
-found, it will return the index. If not, it will return -1 (this is standard). My implementation below will
-work with a list of numbers or strings.&lt;/p&gt;
+&lt;p&gt;The catch is that the list must be sorted to be effective (1,2,3,4,5, not 5,3,4,2,1, for example).
+With a sorted list, the algorithm is simple. If the list isn’t sorted, it simply will not work.&lt;/p&gt;
+
+&lt;h2 id=&quot;so-how-does-it-work&quot;&gt;So how does it work?&lt;/h2&gt;
+
+&lt;p&gt;Basically, a binary search is used to find the index of the searched item in the list in as few guesses
+as possible.  If found, it will return the index of the item. If not, it will return -1 (this is standard).
+On each search iteration, if the guess is too large, every item above it will be ignored from this point on.
+If the guess is too small, every item below will be ignored.  The cycle is repeated until either the item is
+found or the min/max ranges meet, indicating that it does not exist.&lt;/p&gt;
 
 &lt;h2 id=&quot;so-whats-the-big-deal&quot;&gt;So Whats the Big Deal?&lt;/h2&gt;
 
-&lt;p&gt;Why is binary search interesting?  Bhargava uses a simple example.  Lets say we have a list of 4 billion numbers.  To
-figure out if a number is in the list, we would have to loop the entire list and compare every value to what we are
-looking for.  The list has to be sorted, but that doesn’t mean every number is included (it could be a list of even
-numbers, for example).  This means that if our number is the last item in that list, we had to make 4 billion guesses!
-But what if we use binary search?  With a binary search, no matter the number the maximum guesses to find it is 32.
-Thirty two!  Thats a pretty amazing improvement.&lt;/p&gt;
+&lt;p&gt;Why is binary search interesting?  Bhargava uses a simple example.  Lets say we have a list of 4 billion
+numbers and we need to find one in that list.  WIthout binary search, we would have to loop the entire
+list and compare every value to what we are looking for.  That would take a very, very long time. If our
+number is the last item in that list, we had to make 4 billion guesses to find it!  But what if we use
+binary search?  With a binary search, the maximum number of guesses will be 32. Thirty two!  Thats a lot
+less than 4 billion, and a pretty amazing improvement.&lt;/p&gt;
 
 &lt;h2 id=&quot;how-does-it-work&quot;&gt;How does it work?&lt;/h2&gt;
 
-&lt;p&gt;The function is rather simple.  If the sorted list is 4 billion items long, check the middle item.  If the guess is right, win.
-If too high, throw away everything higher. If too low, throw away everything lower. Bam! We now only have 2 billion to go, cutting.  the list in half.  Repeat and there goes another billion, cutting the list in half again.  The next round trims 500 million.
-With this algorithm we are able to quickly hone in onto a very small subset of the list to determine if the item we want exists.&lt;/p&gt;
+&lt;p&gt;The function is rather simple.  Start with a sorted list.  Check the middle item.  If the guess is right,
+win.  If too high, throw away everything higher. If too low, throw away everything lower. Repeat until the
+item is found or the minimum and maximum ranges meet.&lt;/p&gt;
+
+&lt;p&gt;Lets go back to our list of 4 billion and assume we are looking for the number 32.  In 4 billion, we guess
+the half way mark of 2 billion.  Is 2 billion larger than 32? Yup! So, throw away everything greater than
+2 billion. We just got rid of a lot of numbers.  Now repeat.  Half way between 0 and 2 billion is 1 billion.
+Still too high, throw everything above away.  The next guess will be 500 million.  Again, we throw a lot of
+items away. With this algorithm we are able to quickly hone in on to a very small subset of the list to
+determine if the item we want exists.&lt;/p&gt;
 
 &lt;h2 id=&quot;is-it-practical&quot;&gt;Is it practical?&lt;/h2&gt;
 
-&lt;p&gt;Binary search is practical, though I don’t find myself using it directly very often.  Typically a find is more complex, requiring
-a predicate function for comparison (often the item we want is an object), and often our lists are not sorted.  My favorite method
-for searching is a hash table, which is always a single guess to find the item, but we will get to that in another post.&lt;/p&gt;
+&lt;p&gt;Binary search is practical, though I don’t find myself using it (directly) very often.  Most of the real
+searching I’ve needed in real world app development required a predicate function for comparison or
+transformation. Lists are rarely conveniently sorted, so some sort of prep work is needed.  If I’m going
+to transform my list anyway, I tend towards using a hash table, which ensures a single guess lookup, but
+thats for a later post.&lt;/p&gt;
 
 &lt;h2 id=&quot;my-implementation&quot;&gt;My Implementation&lt;/h2&gt;
 
-&lt;p&gt;My implementation is in JavaScript, the language I work in most regularly.  Its simple to work through the
-basic idea of the algorithm. I’m not worried about edge cases or real world use at this point as I’d use a
-library like
-&lt;a href=&quot;http://underscorejs.org/&quot; target=&quot;_blank&quot; title=&quot;Underscore.js&quot;&gt;Underscore.js&lt;/a&gt; or
+&lt;p&gt;My implementation is in JavaScript, the language I work in most regularly. I’m not worried about edge cases
+or real world use at this point, just the basic algorithm.  In a real app I’d use a library like
+&lt;a href=&quot;http://underscorejs.org/&quot; target=&quot;_blank&quot; title=&quot;Underscore.js&quot;&gt;Underscore.js&lt;/a&gt;,
 &lt;a href=&quot;https://lodash.com/&quot; target=&quot;_blank&quot; title=&quot;lodash&quot;&gt;lodash&lt;/a&gt; or
 &lt;a href=&quot;http://ramdajs.com/docs/&quot; target=&quot;_blank&quot; title=&quot;Ramda&quot;&gt;Ramda&lt;/a&gt;
-which are optimized and far more useful (see
-&lt;a href=&quot;http://underscorejs.org/#indexOf&quot; target=&quot;_blank&quot;&gt;Underscore’s indexOf function&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;To see the actual implementation in Underscore.js, checkout the
+which are optimized and provide a host of useful tools. (For example, see
+&lt;a href=&quot;http://underscorejs.org/#indexOf&quot; target=&quot;_blank&quot;&gt;Underscore’s indexOf function&lt;/a&gt;, and
+to see the actual implementation in Underscore.js, checkout the
 &lt;a href=&quot;http://underscorejs.org/docs/underscore.html&quot; target=&quot;_blank&quot;&gt;annotated source&lt;/a&gt;, and search for the
-function &lt;code&gt;createIndexFinder&lt;/code&gt;.&lt;/p&gt;
+function &lt;code&gt;createIndexFinder()&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;My simple implementation:&lt;/p&gt;
+&lt;p&gt;My simple implementation is as follows:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;binarySearch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;attempts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
@@ -98,7 +107,7 @@ function &lt;code&gt;createIndexFinder&lt;/code&gt;.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// a function to generate a list of numbers&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;numbers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;makeNumberList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// a hard coded list of states&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// a hardcoded list of states&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;states&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Alabama&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Alaska&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Arizona&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Arkansas&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;California&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Colorado&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Connecticut&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Delaware&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Florida&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Georgia&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Hawaii&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Idaho&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Illinois Indiana&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Iowa&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Kansas&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Kentucky&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Louisiana&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Maine&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Maryland&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Massachusetts&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Michigan&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Minnesota&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Mississippi&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Missouri&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Montana Nebraska&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Nevada&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;New Hampshire&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;New Jersey&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;New Mexico&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;New York&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;North Carolina&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;North Dakota&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Ohio&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Oklahoma&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Oregon&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Pennsylvania Rhode Island&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;South Carolina&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;South Dakota&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Tennessee&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Texas&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Utah&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Vermont&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Virginia&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Washington&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;West Virginia&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Wisconsin&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Wyoming&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
 
 &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;binarySearch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;995&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// returns 995, the index of the number 995 in the list.&lt;/span&gt;
@@ -277,18 +286,6 @@ to make this convincing.&lt;/p&gt;
         <pubDate>Tue, 24 Mar 2015 00:00:00 -0400</pubDate>
         <link>http://benjaminapetersen.me/layout-attribs/</link>
         <guid isPermaLink="true">http://benjaminapetersen.me/layout-attribs/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Getting Started With Jekyll</title>
-        <description>&lt;p&gt;This is in the works, check back soon.  For the moment I just needed another link
-on the home page… because a single link is lame, yo.&lt;/p&gt;
-</description>
-        <pubDate>Sun, 15 Mar 2015 00:00:00 -0400</pubDate>
-        <link>http://benjaminapetersen.me/getting-started-with-jekyll/</link>
-        <guid isPermaLink="true">http://benjaminapetersen.me/getting-started-with-jekyll/</guid>
         
         
       </item>

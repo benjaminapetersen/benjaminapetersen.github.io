@@ -6,12 +6,12 @@
     <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
     <title>
     
-        Algorithms, Binary Search in JavaScript - Benjamin A. Petersen | UX Developer in Raleigh, NC
+        Algorithms 101 - Binary Search - Benjamin A. Petersen | UX Developer in Raleigh, NC
     
     </title>
     <meta name="viewport" content="width=device-width">
     
-    <meta name="description" content="">
+    <meta name="description" content="Taking a look at Grokking Algorithms by Aditya Bhargava and experimenting with Binary Search in JavaScript">
     
 
     <link href='http://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
@@ -57,67 +57,76 @@
                     Apr 23, 2015
                 </p>
                 <article>
-                <h3 id="tldr">tl;dr</h3>
-
-<p>I’m working through the book
-<a href="http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230" target="_blank" title="Grokking Algorithms">Grokking Algorithms</a> and sharing my implementation of binary search written in JavaScript.</p>
-
-<h1 id="algorithms-are-just-step-by-step-problem-solving-methods">Algorithms Are Just Step By Step Problem Solving Methods.</h1>
+                <h1 id="algorithms-101---binary-search">Algorithms 101 - Binary Search</h1>
 
 <p>As someone who has come into a career in software development through unconventional means, I find
-myself intrigued by the many things I miseed out on by not pursuing a CS or CE degree back in my college
-days.  Currently Algorithms are at the top of my list of Curous Things I Want To Explore.  I’m working
-through the book Grokking Algorithms by Aditya Bhargava.  Bhargava is a good teacher, making use of illustrations
-and clear explanations, ensuring a topic that could be dry and painful stays interesting.</p>
+myself intrigued by the many things I missed out on by not pursuing a CS/CE degree back in my college
+days.  Currently Algorithms are at the top of my list of Curious Things I Want To Explore.  I recently began
+working through the book
+<a href="http://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230" target="_blank" title="Grokking Algorithms">Grokking Algorithms</a>
+by Aditya Bhargava in order to dive into the topic of algorithms.</p>
 
-<h2 id="binary-search">Binary Search</h2>
+<p>The first algorithm in the book is binary search.  Binary search is simply a way to find an item in a
+list in as few steps as possible.  The point?  Efficiency. We want to efficiently search extremely large
+data sets without needing to iterate over every single item in the list.</p>
 
-<p>The first algorithm in the book is binary search.  Binary search is simply a way to find an item in a list in
-the most efficient way possible.  The catch is that the list must be sorted to be effective (1,2,3,4,5, not 5,3,4,2,1).  With a sorted list (sorted is required for this to work), the algorithm is simple.  Guess the halfway point of the list.  If the guess
-is too large, ignore everything above.  If the guess is too small, ignore everything below.  Repeat until you
-find the item, otherwise return nothing.</p>
+<h2 id="the-catch">The Catch</h2>
 
-<p>Basically, a binary search needs to find the index of the searched item in as few guesses as possible. If
-found, it will return the index. If not, it will return -1 (this is standard). My implementation below will
-work with a list of numbers or strings.</p>
+<p>The catch is that the list must be sorted to be effective (1,2,3,4,5, not 5,3,4,2,1, for example).
+With a sorted list, the algorithm is simple. If the list isn’t sorted, it simply will not work.</p>
+
+<h2 id="so-how-does-it-work">So how does it work?</h2>
+
+<p>Basically, a binary search is used to find the index of the searched item in the list in as few guesses
+as possible.  If found, it will return the index of the item. If not, it will return -1 (this is standard).
+On each search iteration, if the guess is too large, every item above it will be ignored from this point on.
+If the guess is too small, every item below will be ignored.  The cycle is repeated until either the item is
+found or the min/max ranges meet, indicating that it does not exist.</p>
 
 <h2 id="so-whats-the-big-deal">So Whats the Big Deal?</h2>
 
-<p>Why is binary search interesting?  Bhargava uses a simple example.  Lets say we have a list of 4 billion numbers.  To
-figure out if a number is in the list, we would have to loop the entire list and compare every value to what we are
-looking for.  The list has to be sorted, but that doesn’t mean every number is included (it could be a list of even
-numbers, for example).  This means that if our number is the last item in that list, we had to make 4 billion guesses!
-But what if we use binary search?  With a binary search, no matter the number the maximum guesses to find it is 32.
-Thirty two!  Thats a pretty amazing improvement.</p>
+<p>Why is binary search interesting?  Bhargava uses a simple example.  Lets say we have a list of 4 billion
+numbers and we need to find one in that list.  WIthout binary search, we would have to loop the entire
+list and compare every value to what we are looking for.  That would take a very, very long time. If our
+number is the last item in that list, we had to make 4 billion guesses to find it!  But what if we use
+binary search?  With a binary search, the maximum number of guesses will be 32. Thirty two!  Thats a lot
+less than 4 billion, and a pretty amazing improvement.</p>
 
 <h2 id="how-does-it-work">How does it work?</h2>
 
-<p>The function is rather simple.  If the sorted list is 4 billion items long, check the middle item.  If the guess is right, win.
-If too high, throw away everything higher. If too low, throw away everything lower. Bam! We now only have 2 billion to go, cutting.  the list in half.  Repeat and there goes another billion, cutting the list in half again.  The next round trims 500 million.
-With this algorithm we are able to quickly hone in onto a very small subset of the list to determine if the item we want exists.</p>
+<p>The function is rather simple.  Start with a sorted list.  Check the middle item.  If the guess is right,
+win.  If too high, throw away everything higher. If too low, throw away everything lower. Repeat until the
+item is found or the minimum and maximum ranges meet.</p>
+
+<p>Lets go back to our list of 4 billion and assume we are looking for the number 32.  In 4 billion, we guess
+the half way mark of 2 billion.  Is 2 billion larger than 32? Yup! So, throw away everything greater than
+2 billion. We just got rid of a lot of numbers.  Now repeat.  Half way between 0 and 2 billion is 1 billion.
+Still too high, throw everything above away.  The next guess will be 500 million.  Again, we throw a lot of
+items away. With this algorithm we are able to quickly hone in on to a very small subset of the list to
+determine if the item we want exists.</p>
 
 <h2 id="is-it-practical">Is it practical?</h2>
 
-<p>Binary search is practical, though I don’t find myself using it directly very often.  Typically a find is more complex, requiring
-a predicate function for comparison (often the item we want is an object), and often our lists are not sorted.  My favorite method
-for searching is a hash table, which is always a single guess to find the item, but we will get to that in another post.</p>
+<p>Binary search is practical, though I don’t find myself using it (directly) very often.  Most of the real
+searching I’ve needed in real world app development required a predicate function for comparison or
+transformation. Lists are rarely conveniently sorted, so some sort of prep work is needed.  If I’m going
+to transform my list anyway, I tend towards using a hash table, which ensures a single guess lookup, but
+thats for a later post.</p>
 
 <h2 id="my-implementation">My Implementation</h2>
 
-<p>My implementation is in JavaScript, the language I work in most regularly.  Its simple to work through the
-basic idea of the algorithm. I’m not worried about edge cases or real world use at this point as I’d use a
-library like
-<a href="http://underscorejs.org/" target="_blank" title="Underscore.js">Underscore.js</a> or
+<p>My implementation is in JavaScript, the language I work in most regularly. I’m not worried about edge cases
+or real world use at this point, just the basic algorithm.  In a real app I’d use a library like
+<a href="http://underscorejs.org/" target="_blank" title="Underscore.js">Underscore.js</a>,
 <a href="https://lodash.com/" target="_blank" title="lodash">lodash</a> or
 <a href="http://ramdajs.com/docs/" target="_blank" title="Ramda">Ramda</a>
-which are optimized and far more useful (see
-<a href="http://underscorejs.org/#indexOf" target="_blank">Underscore’s indexOf function</a>).</p>
-
-<p>To see the actual implementation in Underscore.js, checkout the
+which are optimized and provide a host of useful tools. (For example, see
+<a href="http://underscorejs.org/#indexOf" target="_blank">Underscore’s indexOf function</a>, and
+to see the actual implementation in Underscore.js, checkout the
 <a href="http://underscorejs.org/docs/underscore.html" target="_blank">annotated source</a>, and search for the
-function <code>createIndexFinder</code>.</p>
+function <code>createIndexFinder()</code>.</p>
 
-<p>My simple implementation:</p>
+<p>My simple implementation is as follows:</p>
 
 <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">binarySearch</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">list</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">attempts</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -144,7 +153,7 @@ function <code>createIndexFinder</code>.</p>
 
 <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// a function to generate a list of numbers</span>
 <span class="kd">var</span> <span class="nx">numbers</span> <span class="o">=</span> <span class="nx">makeNumberList</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
-<span class="c1">// a hard coded list of states</span>
+<span class="c1">// a hardcoded list of states</span>
 <span class="kd">var</span> <span class="nx">states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Alabama&#39;</span><span class="p">,</span><span class="s1">&#39;Alaska&#39;</span><span class="p">,</span><span class="s1">&#39;Arizona&#39;</span><span class="p">,</span><span class="s1">&#39;Arkansas&#39;</span><span class="p">,</span><span class="s1">&#39;California&#39;</span><span class="p">,</span><span class="s1">&#39;Colorado&#39;</span><span class="p">,</span><span class="s1">&#39;Connecticut&#39;</span><span class="p">,</span><span class="s1">&#39;Delaware&#39;</span><span class="p">,</span><span class="s1">&#39;Florida&#39;</span><span class="p">,</span><span class="s1">&#39;Georgia&#39;</span><span class="p">,</span><span class="s1">&#39;Hawaii&#39;</span><span class="p">,</span><span class="s1">&#39;Idaho&#39;</span><span class="p">,</span><span class="s1">&#39;Illinois Indiana&#39;</span><span class="p">,</span><span class="s1">&#39;Iowa&#39;</span><span class="p">,</span><span class="s1">&#39;Kansas&#39;</span><span class="p">,</span><span class="s1">&#39;Kentucky&#39;</span><span class="p">,</span><span class="s1">&#39;Louisiana&#39;</span><span class="p">,</span><span class="s1">&#39;Maine&#39;</span><span class="p">,</span><span class="s1">&#39;Maryland&#39;</span><span class="p">,</span><span class="s1">&#39;Massachusetts&#39;</span><span class="p">,</span><span class="s1">&#39;Michigan&#39;</span><span class="p">,</span><span class="s1">&#39;Minnesota&#39;</span><span class="p">,</span><span class="s1">&#39;Mississippi&#39;</span><span class="p">,</span><span class="s1">&#39;Missouri&#39;</span><span class="p">,</span><span class="s1">&#39;Montana Nebraska&#39;</span><span class="p">,</span><span class="s1">&#39;Nevada&#39;</span><span class="p">,</span><span class="s1">&#39;New Hampshire&#39;</span><span class="p">,</span><span class="s1">&#39;New Jersey&#39;</span><span class="p">,</span><span class="s1">&#39;New Mexico&#39;</span><span class="p">,</span><span class="s1">&#39;New York&#39;</span><span class="p">,</span><span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span><span class="s1">&#39;North Dakota&#39;</span><span class="p">,</span><span class="s1">&#39;Ohio&#39;</span><span class="p">,</span><span class="s1">&#39;Oklahoma&#39;</span><span class="p">,</span><span class="s1">&#39;Oregon&#39;</span><span class="p">,</span><span class="s1">&#39;Pennsylvania Rhode Island&#39;</span><span class="p">,</span><span class="s1">&#39;South Carolina&#39;</span><span class="p">,</span><span class="s1">&#39;South Dakota&#39;</span><span class="p">,</span><span class="s1">&#39;Tennessee&#39;</span><span class="p">,</span><span class="s1">&#39;Texas&#39;</span><span class="p">,</span><span class="s1">&#39;Utah&#39;</span><span class="p">,</span><span class="s1">&#39;Vermont&#39;</span><span class="p">,</span><span class="s1">&#39;Virginia&#39;</span><span class="p">,</span><span class="s1">&#39;Washington&#39;</span><span class="p">,</span><span class="s1">&#39;West Virginia&#39;</span><span class="p">,</span><span class="s1">&#39;Wisconsin&#39;</span><span class="p">,</span><span class="s1">&#39;Wyoming&#39;</span><span class="p">];</span>
 
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">binarySearch</span><span class="p">(</span><span class="nx">numbers</span><span class="p">,</span> <span class="mi">995</span><span class="p">));</span> <span class="c1">// returns 995, the index of the number 995 in the list.</span>
