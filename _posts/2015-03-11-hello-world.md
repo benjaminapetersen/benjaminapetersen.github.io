@@ -92,13 +92,3 @@ challenging each other to start a blog for... years probably.  So, formally, I
 declare, Lance, I beat you.
 
 Now, we will see who gets rolling on writing meaningful content first.
-
-
-
-
-
-
-
-
-
-
