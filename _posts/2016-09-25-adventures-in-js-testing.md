@@ -21,7 +21,8 @@ I happen to agree, but ended up writing a number of E2E style tests simply becau
 
 Here is a snippet from [one of my test files](https://github.com/benjaminapetersen/angular-key-value-editor/blob/master/test/unit/spec/directives/defaults.spec.js):
 
-```JavaScript
+{% highlight javascript %}
+
 /* ... */
 
 var withDefaults = function() {
@@ -40,7 +41,9 @@ it('should generate a set-focus class for the key', function() {
 });
 
 /* ... */
-```
+
+{% endhighlight %}
+
 The flow of named functions seemed to work well.  `withDefaults()` represented the HTML to render, including the attributes set to modify behavior.  Then `standardEntries()` represented a standard set of data to pass to the directive.  Finally `render()` took care of manually compiling the directive.  The `scope.$apply()` call would trigger the digest loop and get the directive into the right state.  After that an `expect()` statement could be written.  Its al ot of setup each time.
 
 On the flip side, [in my e2e tests](https://github.com/benjaminapetersen/angular-key-value-editor/blob/master/test/e2e/cannot-add.js) I found that setup basically involved navigating to the page.  Since its black box and unaware of the details of Angular, it was much easier to get rolling.  No manually compiling HTML, no scope to fuss with, no digest loop to trigger.  I went with the page object approach, and found [this set of slides](http://ramonvictor.github.io/protractor/slides/#/49) pretty helpful.
