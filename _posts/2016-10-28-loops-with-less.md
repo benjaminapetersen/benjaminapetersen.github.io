@@ -15,7 +15,7 @@ often have to be written from scratch.
 The following snippet of code is [from a LESS file I wrote](https://github.com/openshift/origin-web-console/commit/b8751aa771d6cc200bb5b2009278dad4cc615f60) a while back
 to generate a handful of utility classes:
 
-{% highlight less %}
+{% highlight sass %}
 // Spacing utility classes
 // creates:
 //  .pad-sm, .pad-md, .pad-lg, etc
