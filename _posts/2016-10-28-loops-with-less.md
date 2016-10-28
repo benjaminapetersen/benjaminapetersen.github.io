@@ -15,7 +15,7 @@ often have to be written from scratch.
 The following snippet of code is [from a LESS file I wrote](https://github.com/openshift/origin-web-console/commit/b8751aa771d6cc200bb5b2009278dad4cc615f60) a while back
 to generate a handful of utility classes:
 
-```less
+{% highlight less %}
 // Spacing utility classes
 // creates:
 //  .pad-sm, .pad-md, .pad-lg, etc
@@ -67,11 +67,11 @@ to generate a handful of utility classes:
 }
 
 .spacers(@sizes);
-```
+{% endhighlight %}
 
 The output looks like this:
 
-```css
+{% highlight css %}
 .pad-auto-none{padding:0 auto}
 .mar-auto-none{margin:0 auto}
 .pad-none{padding:0}
@@ -156,7 +156,7 @@ The output looks like this:
 .mar-bottom-xxl{margin-bottom:30px}
 .pad-left-xxl{padding-left:30px}
 .mar-left-xxl{margin-left:30px}
-```
+{% endhighlight %}
 
 The above could definitely start a war over semantics (I've had that
 debate regarding this code) but I'm more in the object oriented CSS
