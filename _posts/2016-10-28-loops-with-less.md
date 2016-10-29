@@ -158,6 +158,24 @@ The output looks like this:
 .mar-left-xxl{margin-left:30px}
 {% endhighlight %}
 
+Usage is something like this (with a little flex mixed in):
+{% highlight html %}
+<div class="flex-column mar-md pad-sm">
+  <div class="flex mar-sm pad-sm">
+    Hello
+  </div>
+  <div class="mar-md pad-md">
+    World
+  </div>
+</div>
+{% endhighlight %}
+
 The above could definitely start a war over semantics (I've had that
 debate regarding this code) but I'm more in the object oriented CSS
 camp (or any that values CSS highly and treats the HTML as "throwaway").
+
+I've not written a lot of Less and found the need to use recursion rather
+than a built-in 'for' or 'each' loop a little strange.  Still, it was
+interesting working out a way to build nested lists and iterate through them
+in this new language.  I intend to write the same thing in SASS soon for the
+sake of comparison.
