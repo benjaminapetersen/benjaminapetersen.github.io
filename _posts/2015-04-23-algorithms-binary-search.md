@@ -82,8 +82,7 @@ My simple implementation is as follows:
 {% highlight javascript %}
 
 var binarySearch = function(list, item) {
-    var attempts = 0,
-        low = 0,
+    var low = 0,
         high = list.length-1,
         guessIndex,
         guess;
@@ -120,6 +119,3 @@ console.log(binarySearch(states, 'Michigan')); // returns 20, the index of the s
 
 And that's about it.  This is a first pass, so I'm sure ill tinker with it and think of a better solution, but more than
 likely my next post will be on another algorithm rather than an update to this one.
-
-
-
