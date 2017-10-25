@@ -2,7 +2,7 @@
 layout: post
 date:   2016-09-25
 title:  "Adventures in JS Testing"
-tags: javascript, node.js, testing, unit, e2e, karma, protractor, angular
+tags: javascript node.js testing unit e2e karma protractor angular
 ---
 
 

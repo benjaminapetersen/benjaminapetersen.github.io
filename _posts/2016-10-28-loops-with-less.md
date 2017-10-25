@@ -2,7 +2,7 @@
 layout: post
 date:   2016-10-28
 title:  "Loops With Less"
-tags: less, sass, css
+tags: less sass css
 ---
 
 # Loops With less
