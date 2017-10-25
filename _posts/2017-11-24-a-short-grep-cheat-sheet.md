@@ -1,3 +1,10 @@
+---
+layout: post
+date:   2017-11-24
+title:  "A Short Grep Cheatsheet"
+index:  1
+---
+
 # A Short Grep Cheatsheet
 
 I've been working on improving my bash-fu since I started at RedHat. I was introduced to tools like [ack](https://beyondgrep.com/) and [ag](https://github.com/ggreer/the_silver_searcher) along the way, but never actually took the time to learn good ol' `grep`.  The problem is that you inevitably have to `ssh` into a machine that doesn't have all of your favorite tools installed.  In this case, its good to have an understanding of the basics to fall back on.  So, for the short term at least, I'll be `grep`ping all the things.
