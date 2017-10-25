@@ -3,7 +3,7 @@ layout: post
 date: 2015-04-23
 title: "Algorithms 101 - Binary Search"
 description: "Taking a look at Grokking Algorithms by Aditya Bhargava and experimenting with Binary Search in JavaScript"
-index: 3
+tags: algorithms, javascript
 ---
 
 # Algorithms 101 - Binary Search

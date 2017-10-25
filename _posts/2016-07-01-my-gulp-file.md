@@ -2,6 +2,7 @@
 layout: post
 date:   2016-07-01
 title:  "My Gulp File"
+tags: javascript, node.js, gulp, grunt
 ---
 
 ### tl;dr

@@ -2,6 +2,7 @@
 layout: post
 date:   2016-06-23
 title:  "My Angular Modules"
+tags: javascript, node.js, angular
 ---
 
 ### tl;dr

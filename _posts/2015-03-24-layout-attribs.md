@@ -2,7 +2,7 @@
 layout: post
 date: 2015-03-24
 title: "Layout attribs, Angular Material & Polymer, Pt 1"
-index: 3
+tags: less, sass, css
 ---
 
 <link href="/assets/bower/angular-material/angular-material.css" rel="stylesheet">
@@ -172,4 +172,3 @@ it leaves the framing in the html and lets the CSS control the paint job.
 This is a rather trivial example, but I'm going to try to keep my posts short to ensure I regularly
 post.  Stay tuned for a part 2 in the future where I'll attempt to something sufficiently complex
 to make this convincing.
-

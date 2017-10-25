@@ -2,7 +2,7 @@
 layout: post
 date:   2015-03-11
 title:  "Hello World, A Good Place To Start"
-index:  1
+tags: hello world
 ---
 
 ### tl;dr
