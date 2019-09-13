@@ -1,8 +1,8 @@
 ---
 layout: post
 date:   2019-09-11
-title:  "A Short curl Cheat Sheet"
-tags: "today i learned" bash curl terminal
+title:  "A Short cURL Cheatsheet"
+tags: today-i-learned bash curl terminal
 ---
 
 ### tl;dr
@@ -11,7 +11,11 @@ I'm terrible at blogging, so I'm attempting a new series of posts
 with the popular "today I learned" strategy (similar to what you might 
 see [here](https://til.hashrocket.com/)).  I'm kicking this off with curl.
 
-# A Short curl Cheat Sheet
+(Update: I wrote this, published, and then to give myself a pat on the back 
+looked up my website... and realized my previous post, written over 2 years ago, 
+was a grep cheatsheet. D'oh!  Told you I am terrible at blogging. &#128539;)
+
+# A Short curl Cheatsheet
 
 Lots of developers love curl. I must confess, I rarely use it.  When I have, its been for simple enough tasks that I never bothered to learn it 
 well.  Having a decent amount of JavaScript single-page application 

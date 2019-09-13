@@ -3,7 +3,6 @@
 
   <head>
     <meta charset="utf-8">
-    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
     <title>
     
         Hello World, A Good Place To Start - Benjamin A. Petersen | UX Developer in Raleigh, NC
@@ -14,6 +13,17 @@
     <meta name="description" content="">
     
 
+    
+      
+
+
+
+
+
+
+    
+
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
     <link href='http://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/assets/css/reset.css">
@@ -33,7 +43,7 @@
             src="/assets/img/bap.jpg"
             class="rounded">
         <h1 class="slabo27">Benjamin A. Petersen</h1>
-        <p class="slabo27">UX Developer</p>
+        <p class="slabo27">Senior Software Engineer @ Red Hat working on OpenShift</p>
 
         <a href="https://github.com/benjaminapetersen"
            target="_blank">
@@ -48,6 +58,12 @@
             <span class="icon icon-twitter3"></span>
         </a>
     </header>
+
+    <div id="archive">
+    <!-- archive! -->
+</div>
+
+    
 </div>
 
 
@@ -145,16 +161,54 @@ declare, Lance, I beat you.</p>
 
 <p>Now, we will see who gets rolling on writing meaningful content first.</p>
 
-
                 </article>
-            </div>
 
-            <div>
-                <p class="back">
-                    <a href="/">back</a>
-                </p>
-            </div>
-        </div>
+                <!-- TODO: http://longqian.me/2017/02/09/github-jekyll-tag/
+                <div class="tags">
+                  
+                    
+                    <a class="tag" href="/tag/hello">
+                      hello
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/world">
+                      world
+                    </a>
+                  
+                </div>
+                -->
+
+                <div class="backlink">
+                    <p class="back">
+                        <a href="/">back</a>
+                    </p>
+                </div>
+
+                <div class="comments">
+                  <div id="disqus_thread"></div>
+                    <script>
+
+                    /**
+                     https://disqus.com/admin/universalcode/#configuration-variables
+                    */
+                    var disqus_config = function () {
+                        this.page.url = /hello-world/;
+                        this.page.identifier = /hello-world;
+                    };
+
+                    (function() {
+                        var d = document, s = d.createElement('script');
+                        s.src = '//benjaminapetersen-me.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+
+            </div><!-- /.content -->
+        </div><!-- /.main -->
         <footer class="footer">
     <p>Github <a href="https://github.com/benjaminapetersen"
         target="_blank">benjaminapetersen</a></p>
@@ -175,7 +229,6 @@ declare, Lance, I beat you.</p>
 
 </script>
 
-
-    </div>
+    </div><!-- /.wrapper -->
     </body>
 </html>

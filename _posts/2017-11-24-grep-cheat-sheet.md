@@ -1,7 +1,7 @@
 ---
 layout: post
 date:   2017-11-24
-title:  "A Short Grep Cheatsheet"
+title:  "A Short grep Cheatsheet"
 tags: grep bash unix gnu cheatsheet
 ---
 

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>
+    
+        Adventures in JS Testing - Benjamin A. Petersen | UX Developer in Raleigh, NC
+    
+    </title>
+    <meta name="viewport" content="width=device-width">
+    
+    <meta name="description" content="">
+    
+
+    
+      
+
+
+
+
+
+
+    
+
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <link href='http://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/css/reset.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/typography.css">
+    <link rel="stylesheet" href="/assets/css/icons.css">
+    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/bower/pygments/css/monokai.css">
+</head>
+
+  <body>
+    <div class="wrapper">
+
+        <div id="sidebar" class="sidebar">
+    <header>
+        <img
+            src="/assets/img/bap.jpg"
+            class="rounded">
+        <h1 class="slabo27">Benjamin A. Petersen</h1>
+        <p class="slabo27">Senior Software Engineer @ Red Hat working on OpenShift</p>
+
+        <a href="https://github.com/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-github"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-linkedin"></span>
+        </a>
+        <a href="https://twitter.com/bapetersen"
+           target="_blank">
+            <span class="icon icon-twitter3"></span>
+        </a>
+    </header>
+
+    <div id="archive">
+    <!-- archive! -->
+</div>
+
+    
+</div>
+
+
+        <div class="main">
+            <div class="content">
+                <p class="date">
+                    Sep 25, 2016
+                </p>
+                <article>
+                <h3 id="tldr">tl;dr</h3>
+
+<p>Finally, I wrote some tests!</p>
+
+<h1 id="testing-an-angular-directive-a-good-place-to-start">Testing an Angular Directive… a good place to start?</h1>
+
+<p>I’ve been wanting to get serious about writing tests for a couple of years now.  Without a doubt the protection against regressions is extremely appealing.  While working on an Angular module called <a href="https://github.com/benjaminapetersen/angular-key-value-editor">Angular Key Value Editor</a>, I found myself getting more and more uneasy about adding features.  The think was becoming a monster to do regression testing.  Initially, I made a small battalion of html files for manual testing.  All kinds of fun.  Eventually, after reading a bunch of blog posts about testing with Karma (but ignoring a book I had purchased, heh) I bit the bullet.</p>
+
+<p>Before going any further, here is a <a href="https://github.com/openshift/angular-key-value-editor/commit/64df409446251143ee1f438e196996a062f36429">link to the PR</a>.  I don’t know that an Angular Directive is the best thing to cut your teeth on testing with.  The problem is that many of the things that need testing are user interactions, which lends best to E2E style tests.  But according to the <a href="http://martinfowler.com/bliki/TestPyramid.html">testing pyramid</a> (and another <a href="https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html">great article on testing</a> from Google), E2E tests are bad.  Unit tests are a much better investment.</p>
+
+<p>I happen to agree, but ended up writing a number of E2E style tests simply because click events are essential interactions to this directive.  I began with my <code class="highlighter-rouge">test/manual</code> directory where I put the above mention html files.  Then, using Karma and a gulp task, I wrote a set of E2E style tests in <code class="highlighter-rouge">test/e2e</code>.  Following that, I wrote some unit tests in <code class="highlighter-rouge">test/unit</code>.  Initially it was difficult deciding what kind of test to write for each feature.  Some things could be tested either way. Since I absolutely needed generated HTML for pretty much anything to work, driving the browser via E2E seemed to win out.  Manually compiling the directive for a unit test was awkward, but I think my solution to <a href="https://github.com/benjaminapetersen/angular-key-value-editor/blob/master/test/unit/spec/directives/add-row-link.spec.js">generating html a few different ways</a> to test setting attributes worked out.</p>
+
+<p>Here is a snippet from <a href="https://github.com/benjaminapetersen/angular-key-value-editor/blob/master/test/unit/spec/directives/defaults.spec.js">one of my test files</a>:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="cm">/* ... */</span>
+
+<span class="kd">var</span> <span class="nx">withDefaults</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">elem</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">element</span><span class="p">(</span><span class="s1">'&lt;key-value-editor entries="entries"&gt;&lt;/key-value-editor&gt;'</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/* ... */</span>
+
+<span class="nx">it</span><span class="p">(</span><span class="s1">'should generate a set-focus class for the key'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">withDefaults</span><span class="p">();</span>
+  <span class="nx">standardEntries</span><span class="p">();</span>
+  <span class="nx">render</span><span class="p">();</span>
+  <span class="nx">scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">isolate</span> <span class="o">=</span> <span class="nx">elem</span><span class="p">.</span><span class="nx">isolateScope</span><span class="p">();</span>
+  <span class="nx">expect</span><span class="p">(</span><span class="nx">isolate</span><span class="p">.</span><span class="nx">setFocusKeyClass</span><span class="p">).</span><span class="nx">toEqual</span><span class="p">(</span><span class="s1">'key-value-editor-set-focus-key-1000'</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="cm">/* ... */</span></code></pre></figure>
+
+<p>The flow of named functions seemed to work well.  <code class="highlighter-rouge">withDefaults()</code> represented the HTML to render, including the attributes set to modify behavior.  Then <code class="highlighter-rouge">standardEntries()</code> represented a standard set of data to pass to the directive.  Finally <code class="highlighter-rouge">render()</code> took care of manually compiling the directive.  The <code class="highlighter-rouge">scope.$apply()</code> call would trigger the digest loop and get the directive into the right state.  After that an <code class="highlighter-rouge">expect()</code> statement could be written.  Its al ot of setup each time.</p>
+
+<p>On the flip side, <a href="https://github.com/benjaminapetersen/angular-key-value-editor/blob/master/test/e2e/cannot-add.js">in my e2e tests</a> I found that setup basically involved navigating to the page.  Since its black box and unaware of the details of Angular, it was much easier to get rolling.  No manually compiling HTML, no scope to fuss with, no digest loop to trigger.  I went with the page object approach, and found <a href="http://ramonvictor.github.io/protractor/slides/#/49">this set of slides</a> pretty helpful.</p>
+
+                </article>
+
+                <!-- TODO: http://longqian.me/2017/02/09/github-jekyll-tag/
+                <div class="tags">
+                  
+                    
+                    <a class="tag" href="/tag/javascript">
+                      javascript
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/node.js">
+                      node.js
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/testing">
+                      testing
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/unit">
+                      unit
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/e2e">
+                      e2e
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/karma">
+                      karma
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/protractor">
+                      protractor
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/angular">
+                      angular
+                    </a>
+                  
+                </div>
+                -->
+
+                <div class="backlink">
+                    <p class="back">
+                        <a href="/">back</a>
+                    </p>
+                </div>
+
+                <div class="comments">
+                  <div id="disqus_thread"></div>
+                    <script>
+
+                    /**
+                     https://disqus.com/admin/universalcode/#configuration-variables
+                    */
+                    var disqus_config = function () {
+                        this.page.url = /adventures-in-js-testing/;
+                        this.page.identifier = /adventures-in-js-testing;
+                    };
+
+                    (function() {
+                        var d = document, s = d.createElement('script');
+                        s.src = '//benjaminapetersen-me.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+
+            </div><!-- /.content -->
+        </div><!-- /.main -->
+        <footer class="footer">
+    <p>Github <a href="https://github.com/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+    <p>Twitter <a href="https://twitter.com/bapetersen"
+        target="_blank">bapetersen</a></p>
+    <p>Linkedin <a href="https://www.linkedin.com/in/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-15819385-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+    </div><!-- /.wrapper -->
+    </body>
+</html>

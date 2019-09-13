@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>
+    
+        My Gulp File - Benjamin A. Petersen | UX Developer in Raleigh, NC
+    
+    </title>
+    <meta name="viewport" content="width=device-width">
+    
+    <meta name="description" content="">
+    
+
+    
+      
+
+
+
+
+
+
+    
+
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <link href='http://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/css/reset.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/typography.css">
+    <link rel="stylesheet" href="/assets/css/icons.css">
+    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/bower/pygments/css/monokai.css">
+</head>
+
+  <body>
+    <div class="wrapper">
+
+        <div id="sidebar" class="sidebar">
+    <header>
+        <img
+            src="/assets/img/bap.jpg"
+            class="rounded">
+        <h1 class="slabo27">Benjamin A. Petersen</h1>
+        <p class="slabo27">Senior Software Engineer @ Red Hat working on OpenShift</p>
+
+        <a href="https://github.com/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-github"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-linkedin"></span>
+        </a>
+        <a href="https://twitter.com/bapetersen"
+           target="_blank">
+            <span class="icon icon-twitter3"></span>
+        </a>
+    </header>
+
+    <div id="archive">
+    <!-- archive! -->
+</div>
+
+    
+</div>
+
+
+        <div class="main">
+            <div class="content">
+                <p class="date">
+                    Jul 1, 2016
+                </p>
+                <article>
+                <h3 id="tldr">tl;dr</h3>
+
+<p>Grunt gets the job done… but a giant config file?  Gulp is by far my build tool of choice.  It is so much more pleasant to write functions!</p>
+
+<h1 id="my-gulpfilejs-template">My gulpfile.js template</h1>
+
+<p>For the handful of angular modules I have recently worked on I’ve been using the following gulpfile with relatively minor tweaks.  It runs my unit &amp; e2e tests (I
+have landed on Karma and Jasmine as my preferred options), builds, minifies, serves, and can kick off a task used for travis to validate my builds (ensure I
+properly build &amp; minify before merging to master).</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s1">'use strict'</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp'</span><span class="p">),</span>
+    <span class="nx">gutil</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-util'</span><span class="p">),</span>
+    <span class="nx">filesize</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-filesize'</span><span class="p">),</span>
+    <span class="nx">uglify</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-uglify'</span><span class="p">),</span>
+    <span class="nx">rename</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-rename'</span><span class="p">),</span>
+    <span class="nx">concat</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-concat'</span><span class="p">),</span>
+    <span class="nx">jshint</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-jshint'</span><span class="p">),</span>
+    <span class="nx">stylish</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'jshint-stylish'</span><span class="p">),</span>
+    <span class="nx">del</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'del'</span><span class="p">),</span>
+    <span class="nx">browserSync</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'browser-sync'</span><span class="p">),</span>
+    <span class="nx">reload</span> <span class="o">=</span> <span class="nx">browserSync</span><span class="p">.</span><span class="nx">reload</span><span class="p">,</span>
+    <span class="nx">templateCache</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-angular-templatecache'</span><span class="p">),</span>
+    <span class="nx">less</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-less'</span><span class="p">),</span>
+    <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'path'</span><span class="p">),</span>
+    <span class="nx">gulpProtractorAngular</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-angular-protractor'</span><span class="p">),</span>
+    <span class="nx">KarmaServer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'karma'</span><span class="p">).</span><span class="nx">Server</span><span class="p">,</span>
+    <span class="nx">shell</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-shell'</span><span class="p">);</span>
+
+<span class="c1">// vars for finding directories</span>
+<span class="kd">var</span> <span class="nx">match</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">recurse</span><span class="p">:</span> <span class="s1">'**/*'</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">root</span> <span class="o">=</span> <span class="s1">'./'</span><span class="p">,</span>
+    <span class="nx">src</span> <span class="o">=</span> <span class="s1">'./src/'</span><span class="p">,</span>
+    <span class="nx">dist</span> <span class="o">=</span> <span class="s1">'./dist/'</span><span class="p">,</span>
+    <span class="nx">tmp</span> <span class="o">=</span> <span class="s1">'./.tmp/'</span><span class="p">,</span>
+    <span class="nx">tmpBuild</span> <span class="o">=</span> <span class="nx">tmp</span> <span class="o">+</span> <span class="s1">'build/'</span><span class="p">,</span>
+    <span class="nx">test</span> <span class="o">=</span> <span class="s1">'./test/'</span><span class="p">,</span>
+    <span class="nx">testRelative</span> <span class="o">=</span> <span class="s1">'/test/'</span><span class="p">,</span>
+    <span class="nx">demos</span> <span class="o">=</span> <span class="nx">test</span> <span class="o">+</span> <span class="s1">'manual/'</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">srcAll</span> <span class="o">=</span> <span class="nx">src</span> <span class="o">+</span> <span class="nx">match</span><span class="p">.</span><span class="nx">recurse</span><span class="p">,</span>
+    <span class="nx">distAll</span> <span class="o">=</span> <span class="nx">dist</span> <span class="o">+</span><span class="nx">match</span><span class="p">.</span><span class="nx">recurse</span><span class="p">,</span>
+    <span class="nx">demoAll</span> <span class="o">=</span> <span class="nx">demos</span> <span class="o">+</span> <span class="nx">match</span><span class="p">.</span><span class="nx">recurse</span><span class="p">,</span>
+    <span class="nx">tmpAll</span> <span class="o">=</span> <span class="nx">tmpBuild</span> <span class="o">+</span> <span class="nx">match</span><span class="p">.</span><span class="nx">recurse</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">srcJS</span> <span class="o">=</span> <span class="nx">src</span> <span class="o">+</span> <span class="nx">match</span><span class="p">.</span><span class="nx">recurse</span> <span class="o">+</span> <span class="s1">'.js'</span><span class="p">,</span>
+    <span class="nx">srcView</span> <span class="o">=</span> <span class="nx">src</span> <span class="o">+</span> <span class="s1">'/views/'</span><span class="o">+</span> <span class="nx">match</span><span class="p">.</span><span class="nx">recurse</span> <span class="o">+</span> <span class="s1">'.html'</span><span class="p">,</span>
+    <span class="nx">srcLess</span> <span class="o">=</span> <span class="nx">src</span> <span class="o">+</span> <span class="s1">'/less/'</span> <span class="o">+</span> <span class="nx">match</span><span class="p">.</span><span class="nx">recurse</span> <span class="o">+</span> <span class="s1">'.less'</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">outputJS</span> <span class="o">=</span> <span class="s1">'angular-key-value-editor.js'</span><span class="p">,</span>
+    <span class="nx">outputTpl</span> <span class="o">=</span> <span class="s1">'compiled-templates.js'</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">buildSource</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="nx">src</span> <span class="o">+</span> <span class="s1">'*.js'</span><span class="p">,</span>
+  <span class="nx">src</span> <span class="o">+</span> <span class="s1">'directives/**/*.js'</span><span class="p">,</span>
+  <span class="nx">src</span> <span class="o">+</span> <span class="s1">'services/**/*.js'</span>
+<span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">angularModuleName</span> <span class="o">=</span> <span class="s1">'key-value-editor'</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">protocol</span> <span class="o">=</span> <span class="s1">'http://'</span><span class="p">,</span>
+    <span class="nx">host</span> <span class="o">=</span> <span class="s1">'localhost'</span><span class="p">,</span>
+    <span class="nx">serverPort</span> <span class="o">=</span> <span class="mi">9005</span><span class="p">,</span>
+    <span class="nx">baseUrl</span> <span class="o">=</span> <span class="nx">protocol</span> <span class="o">+</span> <span class="nx">host</span> <span class="o">+</span> <span class="s1">':'</span> <span class="o">+</span> <span class="nx">serverPort</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">concatSource</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">outputDest</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">gulp</span>
+          <span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">buildSource</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">concat</span><span class="p">(</span><span class="nx">outputJS</span><span class="p">))</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">filesize</span><span class="p">())</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="nx">outputDest</span> <span class="o">||</span> <span class="nx">dist</span><span class="p">));</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">minifyDist</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">outputDest</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">gulp</span>
+          <span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">dist</span> <span class="o">+</span> <span class="nx">outputJS</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">uglify</span><span class="p">().</span><span class="nx">on</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="nx">gutil</span><span class="p">.</span><span class="nx">log</span><span class="p">))</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">rename</span><span class="p">({</span> <span class="na">extname</span><span class="p">:</span> <span class="s1">'.min.js'</span> <span class="p">}))</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">filesize</span><span class="p">())</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="nx">outputDest</span> <span class="o">||</span> <span class="nx">dist</span><span class="p">));</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">cacheTemplates</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">outputDest</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">gulp</span>
+          <span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">srcView</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">templateCache</span><span class="p">({</span>
+            <span class="na">module</span><span class="p">:</span> <span class="nx">angularModuleName</span>
+          <span class="p">}))</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">rename</span><span class="p">(</span><span class="nx">outputTpl</span><span class="p">))</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">filesize</span><span class="p">())</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="nx">outputDest</span> <span class="o">||</span> <span class="nx">dist</span><span class="p">));</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">buildCSS</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">outputDest</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">gulp</span>
+          <span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">srcLess</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">less</span><span class="p">({</span>
+            <span class="na">paths</span><span class="p">:</span> <span class="p">[</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'less'</span><span class="p">,</span> <span class="s1">'includes'</span><span class="p">)</span> <span class="p">]</span>
+          <span class="p">}))</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="nx">outputDest</span> <span class="o">||</span> <span class="nx">dist</span><span class="p">));</span>
+<span class="p">};</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'clean'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">del</span><span class="p">([</span><span class="nx">distAll</span><span class="p">,</span> <span class="nx">tmpAll</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">paths</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">gutil</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'cleaned files/folders:</span><span class="err">\</span><span class="s1">n'</span><span class="p">,</span> <span class="nx">paths</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">'</span><span class="err">\</span><span class="s1">n'</span><span class="p">),</span> <span class="nx">gutil</span><span class="p">.</span><span class="nx">colors</span><span class="p">.</span><span class="nx">green</span><span class="p">());</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'jshint'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">gulp</span>
+          <span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">srcJS</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">jshint</span><span class="p">())</span>
+          <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">jshint</span><span class="p">.</span><span class="nx">reporter</span><span class="p">(</span><span class="nx">stylish</span><span class="p">));</span>
+<span class="p">});</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'templates'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'clean'</span><span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">cacheTemplates</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'less'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'clean'</span><span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">buildCSS</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'build'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'clean'</span><span class="p">,</span><span class="s1">'templates'</span><span class="p">,</span> <span class="s1">'jshint'</span><span class="p">,</span> <span class="s1">'less'</span><span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">concatSource</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'min'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'build'</span><span class="p">,</span> <span class="s1">'templates'</span><span class="p">],</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">minifyDist</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'min-and-reload'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'min'</span><span class="p">],</span> <span class="nx">reload</span><span class="p">);</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'serve'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// https://www.browsersync.io/docs/options</span>
+  <span class="nx">browserSync</span><span class="p">({</span>
+    <span class="na">port</span><span class="p">:</span> <span class="nx">serverPort</span><span class="p">,</span>
+    <span class="na">server</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">baseDir</span><span class="p">:</span> <span class="nx">root</span>
+    <span class="p">}</span>
+   <span class="p">});</span>
+
+   <span class="c1">// TODO: live-reloading for demo not working yet.</span>
+   <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">([</span><span class="nx">srcAll</span><span class="p">,</span> <span class="nx">distAll</span><span class="p">,</span> <span class="nx">demoAll</span><span class="p">],</span> <span class="p">[</span><span class="s1">'min-and-reload'</span><span class="p">]);</span>
+<span class="p">});</span>
+
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'_tmp-build'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">concatSource</span><span class="p">(</span><span class="nx">tmpBuild</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'_tmp-templates'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">cacheTemplates</span><span class="p">(</span><span class="nx">tmpBuild</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'_tmp-less'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">buildCSS</span><span class="p">(</span><span class="nx">tmpBuild</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'_tmp-min'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'_tmp-build'</span><span class="p">,</span> <span class="s1">'_tmp-templates'</span><span class="p">,</span> <span class="s1">'_tmp-less'</span><span class="p">],</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">minifyDist</span><span class="p">(</span><span class="nx">tmpBuild</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// at present this task exists for travis to use to before</span>
+<span class="c1">// running ./validate.sh to diff our dist against ./.tmp/build</span>
+<span class="c1">// and validate that templates have been cached, js minified, etc.</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'prep-diff'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'_tmp-min'</span><span class="p">],</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// nothing here atm.</span>
+<span class="p">});</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'validate-dist'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'prep-diff'</span><span class="p">],</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// validation script to verify ./dist and ./tmp/build are equals</span>
+  <span class="nx">shell</span><span class="p">.</span><span class="nx">task</span><span class="p">([</span>
+    <span class="s1">'./validate.sh'</span>
+  <span class="p">])();</span>
+<span class="p">});</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'test-e2e'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'serve'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">gulp</span>
+        <span class="p">.</span><span class="nx">src</span><span class="p">([</span><span class="s1">'example_spec.js'</span><span class="p">])</span>
+        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulpProtractorAngular</span><span class="p">({</span>
+            <span class="na">configFile</span><span class="p">:</span> <span class="nx">test</span> <span class="o">+</span> <span class="s1">'protractor.conf.js'</span><span class="p">,</span>
+            <span class="c1">// baseUrl is needed for tests to navigate via relative paths</span>
+            <span class="na">args</span><span class="p">:</span> <span class="p">[</span><span class="s1">'--baseUrl'</span><span class="p">,</span> <span class="nx">baseUrl</span><span class="p">],</span>
+            <span class="na">debug</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="na">autoStartStopServer</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">}))</span>
+        <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+        <span class="p">})</span>
+        <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'end'</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// for integration testing, uses phantomJS</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'test-unit'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">new</span> <span class="nx">KarmaServer</span><span class="p">({</span>
+      <span class="na">configFile</span><span class="p">:</span>  <span class="nx">__dirname</span>  <span class="o">+</span> <span class="nx">testRelative</span> <span class="o">+</span> <span class="s1">'karma.conf.js'</span><span class="p">,</span>
+      <span class="na">port</span><span class="p">:</span> <span class="nx">serverPort</span>
+      <span class="c1">// browsers: ['PhantomJS'] - try the firefox default?</span>
+    <span class="p">},</span> <span class="nx">done</span><span class="p">).</span><span class="nx">start</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="c1">// run all the tests, unit first, then e2e</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'test-unit'</span><span class="p">,</span> <span class="s1">'test-e2e'</span><span class="p">],</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// just runs the other tests</span>
+<span class="p">});</span>
+
+<span class="c1">// for development, uses Chrome</span>
+<span class="c1">// equivalent task to `test-unit`, but long running, watching file changes</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'tdd'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">new</span> <span class="nx">KarmaServer</span><span class="p">({</span>
+    <span class="na">configFile</span><span class="p">:</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="nx">testRelative</span> <span class="o">+</span> <span class="s1">'karma.conf.js'</span><span class="p">,</span>
+    <span class="na">autoWatch</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">singleRun</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="na">port</span><span class="p">:</span> <span class="nx">serverPort</span>
+  <span class="p">},</span> <span class="nx">done</span><span class="p">).</span><span class="nx">start</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'default'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'min'</span><span class="p">,</span> <span class="s1">'serve'</span><span class="p">]);</span>
+
+
+</code></pre></div></div>
+
+                </article>
+
+                <!-- TODO: http://longqian.me/2017/02/09/github-jekyll-tag/
+                <div class="tags">
+                  
+                    
+                    <a class="tag" href="/tag/javascript,">
+                      javascript,
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/node.js,">
+                      node.js,
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/gulp,">
+                      gulp,
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/grunt">
+                      grunt
+                    </a>
+                  
+                </div>
+                -->
+
+                <div class="backlink">
+                    <p class="back">
+                        <a href="/">back</a>
+                    </p>
+                </div>
+
+                <div class="comments">
+                  <div id="disqus_thread"></div>
+                    <script>
+
+                    /**
+                     https://disqus.com/admin/universalcode/#configuration-variables
+                    */
+                    var disqus_config = function () {
+                        this.page.url = /my-gulp-file/;
+                        this.page.identifier = /my-gulp-file;
+                    };
+
+                    (function() {
+                        var d = document, s = d.createElement('script');
+                        s.src = '//benjaminapetersen-me.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+
+            </div><!-- /.content -->
+        </div><!-- /.main -->
+        <footer class="footer">
+    <p>Github <a href="https://github.com/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+    <p>Twitter <a href="https://twitter.com/bapetersen"
+        target="_blank">bapetersen</a></p>
+    <p>Linkedin <a href="https://www.linkedin.com/in/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-15819385-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+    </div><!-- /.wrapper -->
+    </body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>
+    
+        Loops With Less - Benjamin A. Petersen | UX Developer in Raleigh, NC
+    
+    </title>
+    <meta name="viewport" content="width=device-width">
+    
+    <meta name="description" content="">
+    
+
+    
+      
+
+
+
+
+
+
+    
+
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <link href='http://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/css/reset.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/typography.css">
+    <link rel="stylesheet" href="/assets/css/icons.css">
+    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/bower/pygments/css/monokai.css">
+</head>
+
+  <body>
+    <div class="wrapper">
+
+        <div id="sidebar" class="sidebar">
+    <header>
+        <img
+            src="/assets/img/bap.jpg"
+            class="rounded">
+        <h1 class="slabo27">Benjamin A. Petersen</h1>
+        <p class="slabo27">Senior Software Engineer @ Red Hat working on OpenShift</p>
+
+        <a href="https://github.com/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-github"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-linkedin"></span>
+        </a>
+        <a href="https://twitter.com/bapetersen"
+           target="_blank">
+            <span class="icon icon-twitter3"></span>
+        </a>
+    </header>
+
+    <div id="archive">
+    <!-- archive! -->
+</div>
+
+    
+</div>
+
+
+        <div class="main">
+            <div class="content">
+                <p class="date">
+                    Oct 28, 2016
+                </p>
+                <article>
+                <h1 id="loops-with-less">Loops With less</h1>
+
+<p>When I write CSS I like to use utility classes.  When I write
+JavaScript, I like to use utility functions.  Utilities are basically
+just small, laser focused bits of code.  Underscore and Lodash
+provide a great set of utilities for JS, but I find that CSS utilities
+often have to be written from scratch.</p>
+
+<p>The following snippet of code is <a href="https://github.com/openshift/origin-web-console/commit/b8751aa771d6cc200bb5b2009278dad4cc615f60">from a LESS file I wrote</a> a while back
+to generate a handful of utility classes:</p>
+
+<figure class="highlight"><pre><code class="language-sass" data-lang="sass"><span class="c1">// Spacing utility classes
+// creates:
+//  .pad-sm, .pad-md, .pad-lg, etc
+//  .mar-sm, .mar-md, .mar-lg, etc
+//  .pad-left-sm, .mar-left-sm, etc
+//
+</span><span class="k">@nil</span><span class="nd">:</span> <span class="nt">none</span> <span class="nt">0</span> <span class="nt">e</span><span class="o">(</span><span class="s1">'!important'</span><span class="o">);</span>
+<span class="c1">// @auto 0 auto; is built into the fn below
+</span><span class="k">@xs</span><span class="nd">:</span> <span class="nt">xs</span> <span class="nt">3px</span> <span class="nt">e</span><span class="o">(</span><span class="s1">''</span><span class="o">);</span>
+<span class="k">@sm</span><span class="nd">:</span> <span class="nt">sm</span> <span class="nt">5px</span> <span class="nt">e</span><span class="o">(</span><span class="s1">''</span><span class="o">);</span>
+<span class="k">@md</span><span class="nd">:</span> <span class="nt">md</span> <span class="nt">10px</span> <span class="nt">e</span><span class="o">(</span><span class="s1">''</span><span class="o">);</span>
+<span class="k">@lg</span><span class="nd">:</span> <span class="nt">lg</span> <span class="nt">15px</span> <span class="nt">e</span><span class="o">(</span><span class="s1">''</span><span class="o">);</span>
+<span class="k">@xl</span><span class="nd">:</span> <span class="nt">xl</span> <span class="nt">20px</span> <span class="nt">e</span><span class="o">(</span><span class="s1">''</span><span class="o">);</span>
+<span class="k">@xxl</span><span class="nd">:</span> <span class="nt">xxl</span> <span class="nt">30px</span> <span class="nt">e</span><span class="o">(</span><span class="s1">''</span><span class="o">);</span>
+
+<span class="k">@sizes</span><span class="nd">:</span> <span class="o">@</span><span class="nt">nil</span><span class="o">,</span> <span class="o">@</span><span class="nt">xs</span><span class="o">,</span> <span class="o">@</span><span class="nt">sm</span><span class="o">,</span> <span class="o">@</span><span class="nt">md</span><span class="o">,</span> <span class="o">@</span><span class="nt">lg</span><span class="o">,</span> <span class="o">@</span><span class="nt">xl</span><span class="o">,</span> <span class="o">@</span><span class="nt">xxl</span><span class="o">;</span>
+<span class="k">@sides</span><span class="nd">:</span> <span class="nt">top</span><span class="o">,</span> <span class="nt">right</span><span class="o">,</span> <span class="nt">bottom</span><span class="o">,</span> <span class="nt">left</span><span class="o">;</span>
+
+<span class="err">.</span><span class="na">spacer-side</span><span class="err">(@</span><span class="na">list</span><span class="err">, @</span><span class="nl">size</span><span class="err">, @</span><span class="na">px</span><span class="err">, @</span><span class="na">mod</span><span class="err">, @</span><span class="na">i</span><span class="p">:</span><span class="m">1</span><span class="p">)</span> <span class="nf">when</span> <span class="p">(</span><span class="o">@</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="nf">length</span><span class="p">(</span><span class="o">@</span><span class="n">list</span><span class="p">))</span> <span class="err">{</span>
+  <span class="k">@side</span><span class="nd">:</span> <span class="nt">extract</span><span class="o">(@</span><span class="nt">list</span><span class="o">,</span> <span class="o">@</span><span class="nt">i</span><span class="o">);</span>
+  <span class="nc">.pad-</span><span class="o">@</span><span class="err">{</span><span class="nt">side</span><span class="err">}</span><span class="nt">-</span><span class="o">@</span><span class="err">{</span><span class="nt">size</span><span class="err">}</span> <span class="err">{</span>
+    <span class="na">padding-</span><span class="err">@{</span><span class="na">side</span><span class="err">}</span><span class="p">:</span> <span class="o">@</span><span class="nb">px</span> <span class="o">@</span><span class="n">mod</span><span class="err">;</span>
+  <span class="err">}</span>
+  <span class="nc">.mar-</span><span class="o">@</span><span class="err">{</span><span class="nt">side</span><span class="err">}</span><span class="nt">-</span><span class="o">@</span><span class="err">{</span><span class="nt">size</span><span class="err">}</span> <span class="err">{</span>
+    <span class="na">margin-</span><span class="err">@{</span><span class="na">side</span><span class="err">}</span><span class="p">:</span> <span class="o">@</span><span class="nb">px</span> <span class="o">@</span><span class="n">mod</span><span class="err">;</span>
+  <span class="err">}</span>
+  <span class="nc">.spacer-side</span><span class="o">(@</span><span class="nt">list</span><span class="o">,</span> <span class="o">@</span><span class="nt">size</span><span class="o">,</span> <span class="o">@</span><span class="nt">px</span><span class="o">,</span> <span class="o">@</span><span class="nt">mod</span><span class="o">,</span> <span class="o">@</span><span class="nt">i</span><span class="o">+</span><span class="nt">1</span><span class="o">);</span>
+<span class="err">}</span>
+
+<span class="err">.</span><span class="na">spacers</span><span class="err">(@</span><span class="na">list</span><span class="err">, @</span><span class="na">i</span><span class="p">:</span><span class="m">1</span><span class="p">)</span> <span class="nf">when</span> <span class="p">(</span><span class="o">@</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="nf">length</span><span class="p">(</span><span class="o">@</span><span class="n">list</span><span class="p">))</span> <span class="err">{</span>
+  <span class="k">@item</span><span class="nd">:</span> <span class="nt">extract</span><span class="o">(@</span><span class="nt">list</span><span class="o">,</span> <span class="o">@</span><span class="nt">i</span><span class="o">);</span>
+  <span class="k">@key</span><span class="nd">:</span> <span class="nt">extract</span><span class="o">(@</span><span class="nt">item</span><span class="o">,</span> <span class="nt">1</span><span class="o">);</span>
+  <span class="k">@val</span><span class="nd">:</span> <span class="nt">extract</span><span class="o">(@</span><span class="nt">item</span><span class="o">,</span> <span class="nt">2</span><span class="o">);</span>
+  <span class="k">@mod</span><span class="nd">:</span> <span class="nt">extract</span><span class="o">(@</span><span class="nt">item</span><span class="o">,</span> <span class="nt">3</span><span class="o">);</span>
+  <span class="nc">.pad-auto-</span><span class="o">@</span><span class="err">{</span><span class="nt">key</span><span class="err">}</span> <span class="err">{</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="m">0</span> <span class="nb">auto</span><span class="err">;</span>
+  <span class="err">}</span>
+  <span class="nc">.mar-auto-</span><span class="o">@</span><span class="err">{</span><span class="nt">key</span><span class="err">}</span> <span class="err">{</span>
+    <span class="nl">margin</span><span class="p">:</span> <span class="m">0</span> <span class="nb">auto</span><span class="err">;</span>
+  <span class="err">}</span>
+  <span class="nc">.pad-</span><span class="o">@</span><span class="err">{</span><span class="nt">key</span><span class="err">}</span> <span class="err">{</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="o">@</span><span class="n">val</span> <span class="o">@</span><span class="n">val</span> <span class="o">*</span> <span class="m">1</span><span class="mi">.5</span><span class="err">;</span>
+  <span class="err">}</span>
+  <span class="nc">.mar-</span><span class="o">@</span><span class="err">{</span><span class="nt">key</span><span class="err">}</span> <span class="err">{</span>
+    <span class="nl">margin</span><span class="p">:</span> <span class="o">@</span><span class="n">val</span> <span class="o">@</span><span class="n">val</span> <span class="o">*</span> <span class="m">1</span><span class="mi">.5</span><span class="err">;</span>
+  <span class="err">}</span>
+  <span class="nc">.spacer-side</span><span class="o">(@</span><span class="nt">sides</span><span class="o">,</span> <span class="o">@</span><span class="nt">key</span><span class="o">,</span> <span class="o">@</span><span class="nt">val</span><span class="o">,</span> <span class="o">@</span><span class="nt">mod</span><span class="o">);</span>
+  <span class="nc">.spacers</span><span class="o">(@</span><span class="nt">list</span><span class="o">,</span> <span class="o">@</span><span class="nt">i</span><span class="o">+</span><span class="nt">1</span><span class="o">);</span>
+<span class="err">}</span>
+
+<span class="nc">.spacers</span><span class="o">(@</span><span class="nt">sizes</span><span class="o">);</span></code></pre></figure>
+
+<p>The output looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-css" data-lang="css"><span class="nc">.pad-auto-none</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.mar-auto-none</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.pad-none</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">0</span><span class="p">}</span>
+<span class="nc">.mar-none</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">0</span><span class="p">}</span>
+<span class="nc">.pad-top-none</span><span class="p">{</span><span class="nl">padding-top</span><span class="p">:</span><span class="m">0</span><span class="cp">!important</span><span class="p">}</span>
+<span class="nc">.mar-top-none</span><span class="p">{</span><span class="nl">margin-top</span><span class="p">:</span><span class="m">0</span><span class="cp">!important</span><span class="p">}</span>
+<span class="nc">.pad-right-none</span><span class="p">{</span><span class="nl">padding-right</span><span class="p">:</span><span class="m">0</span><span class="cp">!important</span><span class="p">}</span>
+<span class="nc">.mar-right-none</span><span class="p">{</span><span class="nl">margin-right</span><span class="p">:</span><span class="m">0</span><span class="cp">!important</span><span class="p">}</span>
+<span class="nc">.pad-bottom-none</span><span class="p">{</span><span class="nl">padding-bottom</span><span class="p">:</span><span class="m">0</span><span class="cp">!important</span><span class="p">}</span>
+<span class="nc">.mar-bottom-none</span><span class="p">{</span><span class="nl">margin-bottom</span><span class="p">:</span><span class="m">0</span><span class="cp">!important</span><span class="p">}</span>
+<span class="nc">.pad-left-none</span><span class="p">{</span><span class="nl">padding-left</span><span class="p">:</span><span class="m">0</span><span class="cp">!important</span><span class="p">}</span>
+<span class="nc">.mar-left-none</span><span class="p">{</span><span class="nl">margin-left</span><span class="p">:</span><span class="m">0</span><span class="cp">!important</span><span class="p">}</span>
+<span class="nc">.pad-auto-xs</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.mar-auto-xs</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.pad-xs</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">3px</span> <span class="m">4.5px</span><span class="p">}</span>
+<span class="nc">.mar-xs</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">3px</span> <span class="m">4.5px</span><span class="p">}</span>
+<span class="nc">.pad-top-xs</span><span class="p">{</span><span class="nl">padding-top</span><span class="p">:</span><span class="m">3px</span><span class="p">}</span>
+<span class="nc">.mar-top-xs</span><span class="p">{</span><span class="nl">margin-top</span><span class="p">:</span><span class="m">3px</span><span class="p">}</span>
+<span class="nc">.pad-right-xs</span><span class="p">{</span><span class="nl">padding-right</span><span class="p">:</span><span class="m">3px</span><span class="p">}</span>
+<span class="nc">.mar-right-xs</span><span class="p">{</span><span class="nl">margin-right</span><span class="p">:</span><span class="m">3px</span><span class="p">}</span>
+<span class="nc">.pad-bottom-xs</span><span class="p">{</span><span class="nl">padding-bottom</span><span class="p">:</span><span class="m">3px</span><span class="p">}</span>
+<span class="nc">.mar-bottom-xs</span><span class="p">{</span><span class="nl">margin-bottom</span><span class="p">:</span><span class="m">3px</span><span class="p">}</span>
+<span class="nc">.pad-left-xs</span><span class="p">{</span><span class="nl">padding-left</span><span class="p">:</span><span class="m">3px</span><span class="p">}</span>
+<span class="nc">.mar-left-xs</span><span class="p">{</span><span class="nl">margin-left</span><span class="p">:</span><span class="m">3px</span><span class="p">}</span>
+<span class="nc">.pad-auto-sm</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.mar-auto-sm</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.pad-sm</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">5px</span> <span class="m">7.5px</span><span class="p">}</span>
+<span class="nc">.mar-sm</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">5px</span> <span class="m">7.5px</span><span class="p">}</span>
+<span class="nc">.pad-top-sm</span><span class="p">{</span><span class="nl">padding-top</span><span class="p">:</span><span class="m">5px</span><span class="p">}</span>
+<span class="nc">.mar-top-sm</span><span class="p">{</span><span class="nl">margin-top</span><span class="p">:</span><span class="m">5px</span><span class="p">}</span>
+<span class="nc">.pad-right-sm</span><span class="p">{</span><span class="nl">padding-right</span><span class="p">:</span><span class="m">5px</span><span class="p">}</span>
+<span class="nc">.mar-right-sm</span><span class="p">{</span><span class="nl">margin-right</span><span class="p">:</span><span class="m">5px</span><span class="p">}</span>
+<span class="nc">.pad-bottom-sm</span><span class="p">{</span><span class="nl">padding-bottom</span><span class="p">:</span><span class="m">5px</span><span class="p">}</span>
+<span class="nc">.mar-bottom-sm</span><span class="p">{</span><span class="nl">margin-bottom</span><span class="p">:</span><span class="m">5px</span><span class="p">}</span>
+<span class="nc">.pad-left-sm</span><span class="p">{</span><span class="nl">padding-left</span><span class="p">:</span><span class="m">5px</span><span class="p">}</span>
+<span class="nc">.mar-left-sm</span><span class="p">{</span><span class="nl">margin-left</span><span class="p">:</span><span class="m">5px</span><span class="p">}</span>
+<span class="nc">.pad-auto-md</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.mar-auto-md</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.pad-md</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">10px</span> <span class="m">15px</span><span class="p">}</span>
+<span class="nc">.mar-md</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">10px</span> <span class="m">15px</span><span class="p">}</span>
+<span class="nc">.pad-top-md</span><span class="p">{</span><span class="nl">padding-top</span><span class="p">:</span><span class="m">10px</span><span class="p">}</span>
+<span class="nc">.mar-top-md</span><span class="p">{</span><span class="nl">margin-top</span><span class="p">:</span><span class="m">10px</span><span class="p">}</span>
+<span class="nc">.pad-right-md</span><span class="p">{</span><span class="nl">padding-right</span><span class="p">:</span><span class="m">10px</span><span class="p">}</span>
+<span class="nc">.mar-right-md</span><span class="p">{</span><span class="nl">margin-right</span><span class="p">:</span><span class="m">10px</span><span class="p">}</span>
+<span class="nc">.pad-bottom-md</span><span class="p">{</span><span class="nl">padding-bottom</span><span class="p">:</span><span class="m">10px</span><span class="p">}</span>
+<span class="nc">.mar-bottom-md</span><span class="p">{</span><span class="nl">margin-bottom</span><span class="p">:</span><span class="m">10px</span><span class="p">}</span>
+<span class="nc">.pad-left-md</span><span class="p">{</span><span class="nl">padding-left</span><span class="p">:</span><span class="m">10px</span><span class="p">}</span>
+<span class="nc">.mar-left-md</span><span class="p">{</span><span class="nl">margin-left</span><span class="p">:</span><span class="m">10px</span><span class="p">}</span>
+<span class="nc">.pad-auto-lg</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.mar-auto-lg</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.pad-lg</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">15px</span> <span class="m">22.5px</span><span class="p">}</span>
+<span class="nc">.mar-lg</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">15px</span> <span class="m">22.5px</span><span class="p">}</span>
+<span class="nc">.pad-top-lg</span><span class="p">{</span><span class="nl">padding-top</span><span class="p">:</span><span class="m">15px</span><span class="p">}</span>
+<span class="nc">.mar-top-lg</span><span class="p">{</span><span class="nl">margin-top</span><span class="p">:</span><span class="m">15px</span><span class="p">}</span>
+<span class="nc">.pad-right-lg</span><span class="p">{</span><span class="nl">padding-right</span><span class="p">:</span><span class="m">15px</span><span class="p">}</span>
+<span class="nc">.mar-right-lg</span><span class="p">{</span><span class="nl">margin-right</span><span class="p">:</span><span class="m">15px</span><span class="p">}</span>
+<span class="nc">.pad-bottom-lg</span><span class="p">{</span><span class="nl">padding-bottom</span><span class="p">:</span><span class="m">15px</span><span class="p">}</span>
+<span class="nc">.mar-bottom-lg</span><span class="p">{</span><span class="nl">margin-bottom</span><span class="p">:</span><span class="m">15px</span><span class="p">}</span>
+<span class="nc">.pad-left-lg</span><span class="p">{</span><span class="nl">padding-left</span><span class="p">:</span><span class="m">15px</span><span class="p">}</span>
+<span class="nc">.mar-left-lg</span><span class="p">{</span><span class="nl">margin-left</span><span class="p">:</span><span class="m">15px</span><span class="p">}</span>
+<span class="nc">.pad-auto-xl</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.mar-auto-xl</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.pad-xl</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">20px</span> <span class="m">30px</span><span class="p">}</span>
+<span class="nc">.mar-xl</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">20px</span> <span class="m">30px</span><span class="p">}</span>
+<span class="nc">.pad-top-xl</span><span class="p">{</span><span class="nl">padding-top</span><span class="p">:</span><span class="m">20px</span><span class="p">}</span>
+<span class="nc">.mar-top-xl</span><span class="p">{</span><span class="nl">margin-top</span><span class="p">:</span><span class="m">20px</span><span class="p">}</span>
+<span class="nc">.pad-right-xl</span><span class="p">{</span><span class="nl">padding-right</span><span class="p">:</span><span class="m">20px</span><span class="p">}</span>
+<span class="nc">.mar-right-xl</span><span class="p">{</span><span class="nl">margin-right</span><span class="p">:</span><span class="m">20px</span><span class="p">}</span>
+<span class="nc">.pad-bottom-xl</span><span class="p">{</span><span class="nl">padding-bottom</span><span class="p">:</span><span class="m">20px</span><span class="p">}</span>
+<span class="nc">.mar-bottom-xl</span><span class="p">{</span><span class="nl">margin-bottom</span><span class="p">:</span><span class="m">20px</span><span class="p">}</span>
+<span class="nc">.pad-left-xl</span><span class="p">{</span><span class="nl">padding-left</span><span class="p">:</span><span class="m">20px</span><span class="p">}</span>
+<span class="nc">.mar-left-xl</span><span class="p">{</span><span class="nl">margin-left</span><span class="p">:</span><span class="m">20px</span><span class="p">}</span>
+<span class="nc">.pad-auto-xxl</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.mar-auto-xxl</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">0</span> <span class="nb">auto</span><span class="p">}</span>
+<span class="nc">.pad-xxl</span><span class="p">{</span><span class="nl">padding</span><span class="p">:</span><span class="m">30px</span> <span class="m">45px</span><span class="p">}</span>
+<span class="nc">.mar-xxl</span><span class="p">{</span><span class="nl">margin</span><span class="p">:</span><span class="m">30px</span> <span class="m">45px</span><span class="p">}</span>
+<span class="nc">.pad-top-xxl</span><span class="p">{</span><span class="nl">padding-top</span><span class="p">:</span><span class="m">30px</span><span class="p">}</span>
+<span class="nc">.mar-top-xxl</span><span class="p">{</span><span class="nl">margin-top</span><span class="p">:</span><span class="m">30px</span><span class="p">}</span>
+<span class="nc">.pad-right-xxl</span><span class="p">{</span><span class="nl">padding-right</span><span class="p">:</span><span class="m">30px</span><span class="p">}</span>
+<span class="nc">.mar-right-xxl</span><span class="p">{</span><span class="nl">margin-right</span><span class="p">:</span><span class="m">30px</span><span class="p">}</span>
+<span class="nc">.pad-bottom-xxl</span><span class="p">{</span><span class="nl">padding-bottom</span><span class="p">:</span><span class="m">30px</span><span class="p">}</span>
+<span class="nc">.mar-bottom-xxl</span><span class="p">{</span><span class="nl">margin-bottom</span><span class="p">:</span><span class="m">30px</span><span class="p">}</span>
+<span class="nc">.pad-left-xxl</span><span class="p">{</span><span class="nl">padding-left</span><span class="p">:</span><span class="m">30px</span><span class="p">}</span>
+<span class="nc">.mar-left-xxl</span><span class="p">{</span><span class="nl">margin-left</span><span class="p">:</span><span class="m">30px</span><span class="p">}</span></code></pre></figure>
+
+<p>Usage is something like this (with a little flex mixed in):</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"flex-column mar-md pad-sm"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"flex mar-sm pad-sm"</span><span class="nt">&gt;</span>
+    Hello
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"mar-md pad-md"</span><span class="nt">&gt;</span>
+    World
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></figure>
+
+<p>The above could definitely start a war over semantics (I’ve had that
+debate regarding this code) but I’m more in the object oriented CSS
+camp (or any that values CSS highly and treats the HTML as “throwaway”).</p>
+
+<p>I’ve not written a lot of Less and found the need to use recursion rather
+than a built-in ‘for’ or ‘each’ loop a little strange.  Still, it was
+interesting working out a way to build nested lists and iterate through them
+in this new language.  I intend to write the same thing in SASS soon for the
+sake of comparison.</p>
+
+                </article>
+
+                <!-- TODO: http://longqian.me/2017/02/09/github-jekyll-tag/
+                <div class="tags">
+                  
+                    
+                    <a class="tag" href="/tag/less">
+                      less
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/sass">
+                      sass
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/css">
+                      css
+                    </a>
+                  
+                </div>
+                -->
+
+                <div class="backlink">
+                    <p class="back">
+                        <a href="/">back</a>
+                    </p>
+                </div>
+
+                <div class="comments">
+                  <div id="disqus_thread"></div>
+                    <script>
+
+                    /**
+                     https://disqus.com/admin/universalcode/#configuration-variables
+                    */
+                    var disqus_config = function () {
+                        this.page.url = /loops-with-less/;
+                        this.page.identifier = /loops-with-less;
+                    };
+
+                    (function() {
+                        var d = document, s = d.createElement('script');
+                        s.src = '//benjaminapetersen-me.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+
+            </div><!-- /.content -->
+        </div><!-- /.main -->
+        <footer class="footer">
+    <p>Github <a href="https://github.com/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+    <p>Twitter <a href="https://twitter.com/bapetersen"
+        target="_blank">bapetersen</a></p>
+    <p>Linkedin <a href="https://www.linkedin.com/in/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-15819385-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+    </div><!-- /.wrapper -->
+    </body>
+</html>

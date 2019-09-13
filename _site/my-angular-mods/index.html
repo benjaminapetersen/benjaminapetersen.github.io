@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>
+    
+        My Angular Modules - Benjamin A. Petersen | UX Developer in Raleigh, NC
+    
+    </title>
+    <meta name="viewport" content="width=device-width">
+    
+    <meta name="description" content="">
+    
+
+    
+      
+
+
+
+
+
+
+    
+
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <link href='http://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/css/reset.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/typography.css">
+    <link rel="stylesheet" href="/assets/css/icons.css">
+    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/bower/pygments/css/monokai.css">
+</head>
+
+  <body>
+    <div class="wrapper">
+
+        <div id="sidebar" class="sidebar">
+    <header>
+        <img
+            src="/assets/img/bap.jpg"
+            class="rounded">
+        <h1 class="slabo27">Benjamin A. Petersen</h1>
+        <p class="slabo27">Senior Software Engineer @ Red Hat working on OpenShift</p>
+
+        <a href="https://github.com/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-github"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-linkedin"></span>
+        </a>
+        <a href="https://twitter.com/bapetersen"
+           target="_blank">
+            <span class="icon icon-twitter3"></span>
+        </a>
+    </header>
+
+    <div id="archive">
+    <!-- archive! -->
+</div>
+
+    
+</div>
+
+
+        <div class="main">
+            <div class="content">
+                <p class="date">
+                    Jun 23, 2016
+                </p>
+                <article>
+                <h3 id="tldr">tl;dr</h3>
+
+<p>Blogging is hard. I have not posted in a very long time, So to kickstart a habit of posting (even little articles), here is a list of angular modules I’ve been working on over the past few months.</p>
+
+<h1 id="a-few-angular-mods-ive-been-working-on">A few Angular Mods I’ve been working on</h1>
+
+<p>I’ve been working for <a href="https://www.redhat.com/en">Red Hat</a> for over a year now.  Its really been a great workplace.  I started this blog shortly before taking my current position, thus writing more posts has taken a back seat to my ramp-up efforts.  I’m working on a product called <a href="https://github.com/openshift/origin">OpenShift</a>, a Platform-as-a-Service (PaaS), essentially a container orchestration platform built on top of <a href="http://kubernetes.io/">Kubernetes</a>, which is built on top of <a href="https://www.docker.com/">Docker</a>.  Thats a mouthful, probably a run-on sentence, and a lot to digest.  Specifically I contribute to the <a href="https://github.com/openshift/origin-web-console">web console</a> packaged with OpenShift.</p>
+
+<p>Since the web console is built with <a href="https://github.com/angular/angular.js">Angular (1.x)</a>, I’ve spent the last year sharpening my skills with this technology (and lamenting that 2.0 is moving to typescript, but thats another story).</p>
+
+<p>I’ve spun off a few angular modules, some that have been integrated into OpenShift, and some just for fun.  I’ll list them in this post and perhaps write a bit more on the more interesting modules in the future:</p>
+
+<ul>
+  <li><a href="https://github.com/openshift/angular-extension-registry">angular-extension-registry</a></li>
+  <li><a href="https://github.com/benjaminapetersen/angular-element-query">angular-element-query</a></li>
+  <li><a href="https://github.com/benjaminapetersen/angular-key-value-editor">angular-key-value-editor</a></li>
+  <li><a href="https://github.com/benjaminapetersen/angular-simple-pubsub">angular-simple-pubsub</a></li>
+  <li><a href="https://github.com/benjaminapetersen?tab=repositories">angular-hide-if-empty</a></li>
+  <li><a href="https://github.com/benjaminapetersen/angular-promise-for-storage">angular-promise-for-storage</a></li>
+</ul>
+
+<p>Rather than alphabetizing, I ranked these by usefulness/viability.  The top repos have been used in real world products, have matured enough to be usable, and perhaps have been registered with <a href="https://bower.io/">bower</a> or <a href="https://www.npmjs.com/">npm</a>.</p>
+
+                </article>
+
+                <!-- TODO: http://longqian.me/2017/02/09/github-jekyll-tag/
+                <div class="tags">
+                  
+                    
+                    <a class="tag" href="/tag/javascript,">
+                      javascript,
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/node.js,">
+                      node.js,
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/angular">
+                      angular
+                    </a>
+                  
+                </div>
+                -->
+
+                <div class="backlink">
+                    <p class="back">
+                        <a href="/">back</a>
+                    </p>
+                </div>
+
+                <div class="comments">
+                  <div id="disqus_thread"></div>
+                    <script>
+
+                    /**
+                     https://disqus.com/admin/universalcode/#configuration-variables
+                    */
+                    var disqus_config = function () {
+                        this.page.url = /my-angular-mods/;
+                        this.page.identifier = /my-angular-mods;
+                    };
+
+                    (function() {
+                        var d = document, s = d.createElement('script');
+                        s.src = '//benjaminapetersen-me.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+
+            </div><!-- /.content -->
+        </div><!-- /.main -->
+        <footer class="footer">
+    <p>Github <a href="https://github.com/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+    <p>Twitter <a href="https://twitter.com/bapetersen"
+        target="_blank">bapetersen</a></p>
+    <p>Linkedin <a href="https://www.linkedin.com/in/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-15819385-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+    </div><!-- /.wrapper -->
+    </body>
+</html>

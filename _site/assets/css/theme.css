@@ -128,12 +128,3 @@ code {
     }
 }
 
-/* tags
- ------------------------------------------ */
-.tags .tag {
-  margin: 0 .625em .625em 0;
-  padding: .25em .5em;
-  background: #009DD2;
-  color: #fff;
-  border-radius: .25em;
-}

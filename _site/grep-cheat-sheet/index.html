@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>
+    
+        A Short grep Cheatsheet - Benjamin A. Petersen | UX Developer in Raleigh, NC
+    
+    </title>
+    <meta name="viewport" content="width=device-width">
+    
+    <meta name="description" content="">
+    
+
+    
+      
+
+
+
+
+
+
+    
+
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <link href='http://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/css/reset.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/typography.css">
+    <link rel="stylesheet" href="/assets/css/icons.css">
+    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/bower/pygments/css/monokai.css">
+</head>
+
+  <body>
+    <div class="wrapper">
+
+        <div id="sidebar" class="sidebar">
+    <header>
+        <img
+            src="/assets/img/bap.jpg"
+            class="rounded">
+        <h1 class="slabo27">Benjamin A. Petersen</h1>
+        <p class="slabo27">Senior Software Engineer @ Red Hat working on OpenShift</p>
+
+        <a href="https://github.com/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-github"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-linkedin"></span>
+        </a>
+        <a href="https://twitter.com/bapetersen"
+           target="_blank">
+            <span class="icon icon-twitter3"></span>
+        </a>
+    </header>
+
+    <div id="archive">
+    <!-- archive! -->
+</div>
+
+    
+</div>
+
+
+        <div class="main">
+            <div class="content">
+                <p class="date">
+                    Nov 24, 2017
+                </p>
+                <article>
+                <h1 id="a-short-grep-cheatsheet">A Short Grep Cheatsheet</h1>
+
+<p>I’ve been working on improving my bash-fu since I started at RedHat. I was introduced to tools like <a href="https://beyondgrep.com/">ack</a> and <a href="https://github.com/ggreer/the_silver_searcher">ag</a> along the way, but never actually took the time to learn good ol’ <code class="highlighter-rouge">grep</code>.  The problem is that you inevitably have to <code class="highlighter-rouge">ssh</code> into a machine that doesn’t have all of your favorite tools installed.  In this case, its good to have an understanding of the basics to fall back on.  So, for the short term at least, I’ll be <code class="highlighter-rouge">grep</code>ping all the things.</p>
+
+<p>As an aside, I’ve definitely come to appreciate the <a href="https://en.wikipedia.org/wiki/GNU">GNU</a> versions of commands which brought us long form flags.  MacOS includes the BSD versions, for some horrible reason.  Long form
+flags are actually memorable and far less cryptic.  Go team user experience!</p>
+
+<p>By the way, <code class="highlighter-rouge">grep</code> stands for <code class="highlighter-rouge">g/re/p</code>, or “globally search a
+regular expression and print”.  Like many <a href="https://en.wikipedia.org/wiki/Unix-like">Unix</a> tools, it is
+line based.  This is important to know as it won’t match
+multiple occurrences of search terms in one line unless you
+explicitly ask with a flag.</p>
+
+<p><code class="highlighter-rouge">grep</code>’s basic job is to print lines matching some pattern.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># search for a string in a single file</span>
+<span class="nb">grep</span> <span class="s2">"some string"</span> file.txt
+<span class="c"># search for a string in all files in the current directory  </span>
+<span class="nb">grep</span> <span class="s2">"some string"</span> <span class="k">*</span>
+<span class="c"># recursive</span>
+<span class="nb">grep</span> <span class="nt">--recursive</span> <span class="s2">"some string"</span> <span class="nb">.</span>
+<span class="nb">grep</span> <span class="nt">-r</span> <span class="s2">"some string"</span> ./
+<span class="c"># search for a string &amp; show lines before &amp; after the context</span>
+<span class="c"># of your search. The possible flags are: --before-context,</span>
+<span class="c"># --after-context &amp; --context</span>
+<span class="nb">grep</span> <span class="nt">--after-context</span> 3 <span class="s2">"some string"</span> file.txt
+<span class="nb">grep</span> <span class="nt">--before-context</span> 2 <span class="s2">"some string"</span> file.txt
+<span class="nb">grep</span> <span class="nt">-A</span> 3 <span class="nt">-B</span> 2 <span class="s2">"some string"</span> file.txt
+<span class="c"># if you want the same # of lines before and after, just use `-C`:</span>
+<span class="nb">grep</span> <span class="nt">--context</span> 3 <span class="s2">"some string"</span> file.txt
+<span class="nb">grep</span> <span class="nt">-C</span> 3 <span class="s2">"some string"</span> file.txt
+<span class="c"># if you really want to be terse, you can just -&lt;num&gt;</span>
+<span class="nb">grep</span> <span class="nt">-3</span> <span class="s2">"some string"</span> file.txt
+<span class="c"># search for a string within a certain set of files in the directory</span>
+<span class="nb">grep</span> <span class="s2">"some string"</span> ./foo_<span class="k">*</span>
+<span class="c"># case insensitive search</span>
+<span class="nb">grep</span> <span class="nt">--ignore-case</span> <span class="s2">"SoMe StRInG"</span> <span class="k">*</span>
+<span class="nb">grep</span> <span class="nt">-i</span> <span class="s2">"SoMe StRInG"</span> <span class="k">*</span>
+<span class="c"># search for a regex in a file, a handful of examples:</span>
+<span class="nb">grep</span> <span class="s2">"REGEX"</span> file.txt
+<span class="nb">grep</span> <span class="s2">"^line starts with"</span> file.txt
+<span class="nb">grep</span> <span class="s2">"line ends with$"</span> file.txt
+<span class="nb">grep</span> <span class="s2">"^line contains only these words$"</span>file.txt
+<span class="nb">grep</span> <span class="s2">"starts with this.*and ends with that"</span> file.txt  <span class="c"># .* and has an arbitrary gap in the middle</span>
+<span class="nb">grep</span> <span class="s1">'[Tt]ext'</span> file.txt <span class="c"># Text or text</span>
+<span class="nb">grep</span> <span class="s1">'T[eE][xX]t'</span> file.txt <span class="c"># Text or TExt or TEXt or... (however, just consider -i unless reason to be picky)</span>
+<span class="nb">grep</span> <span class="s1">'^$'</span> file.txt <span class="c"># blank lines</span>
+<span class="nb">grep</span> <span class="s1">'[0-9][0-9]'</span> file.txt <span class="c"># pairs of digits</span>
+<span class="c"># multiple regex</span>
+<span class="nb">grep</span> <span class="nt">--regexp</span><span class="o">=</span><span class="s2">"[Ss]ome"</span> <span class="nt">--regexp</span><span class="o">=</span><span class="s2">"[Tt]ext"</span> file.txt
+<span class="nb">grep</span> <span class="nt">-e</span> <span class="s2">"[Ss]ome"</span> <span class="nt">-e</span> <span class="s2">"[Tt]ext"</span> file.txt
+<span class="c"># invert multiple regex (non matches)</span>
+<span class="nb">grep</span> <span class="nt">--invert-match</span> <span class="nt">-e</span> <span class="s2">"[Ss]ome"</span> <span class="nt">-e</span> <span class="s2">"[Tt]ext"</span> file.txt <span class="c"># -v is short for --invert-match</span>
+<span class="c"># search for exact word match.</span>
+<span class="nb">grep</span> <span class="nt">--word-regexp</span> <span class="s1">'is'</span> file.txt  <span class="c"># this, his, etc will not match, only 'is'</span>
+<span class="nb">grep</span> <span class="nt">--w</span> <span class="s1">'is'</span> file.txt
+<span class="c"># custom highlight output before doing next search</span>
+<span class="nb">export </span><span class="nv">GREP_OPTIONS</span><span class="o">=</span><span class="s1">'--color=auto'</span> <span class="nv">GREP_COLOR</span><span class="o">=</span><span class="s1">'100;8'</span>
+<span class="c"># invert the match (search for non matches)</span>
+<span class="nb">grep</span> <span class="nt">--invert-match</span> <span class="s2">"some string"</span> file.txt
+<span class="nb">grep</span> <span class="nt">-v</span> <span class="s2">"some string"</span> file.txt
+<span class="c"># count lines that match</span>
+<span class="nb">grep</span> <span class="nt">--count</span> <span class="s2">"some string"</span> file.txt  <span class="c"># &lt;num&gt;</span>
+<span class="nb">grep</span> <span class="nt">-c</span> <span class="s2">"some string"</span> file.txt
+<span class="c"># count lines that do not match</span>
+<span class="nb">grep</span> <span class="nt">-v</span> <span class="nt">-c</span> <span class="s2">"some string"</span> file.txt
+<span class="c"># print only matching filenames</span>
+<span class="nb">grep</span> <span class="nt">--files-with-matches</span> <span class="s2">"some string"</span> ./
+<span class="nb">grep</span> <span class="nt">-l</span> <span class="s2">"some string"</span> ./
+</code></pre></div></div>
+
+<p><a href="http://www.thegeekstuff.com/2009/03/15-practical-unix-grep-command-examples/">This article</a> from The Geek Stuff was a helpful reference for this post.</p>
+
+                </article>
+
+                <!-- TODO: http://longqian.me/2017/02/09/github-jekyll-tag/
+                <div class="tags">
+                  
+                    
+                    <a class="tag" href="/tag/grep">
+                      grep
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/bash">
+                      bash
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/unix">
+                      unix
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/gnu">
+                      gnu
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/cheatsheet">
+                      cheatsheet
+                    </a>
+                  
+                </div>
+                -->
+
+                <div class="backlink">
+                    <p class="back">
+                        <a href="/">back</a>
+                    </p>
+                </div>
+
+                <div class="comments">
+                  <div id="disqus_thread"></div>
+                    <script>
+
+                    /**
+                     https://disqus.com/admin/universalcode/#configuration-variables
+                    */
+                    var disqus_config = function () {
+                        this.page.url = /grep-cheat-sheet/;
+                        this.page.identifier = /grep-cheat-sheet;
+                    };
+
+                    (function() {
+                        var d = document, s = d.createElement('script');
+                        s.src = '//benjaminapetersen-me.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+
+            </div><!-- /.content -->
+        </div><!-- /.main -->
+        <footer class="footer">
+    <p>Github <a href="https://github.com/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+    <p>Twitter <a href="https://twitter.com/bapetersen"
+        target="_blank">bapetersen</a></p>
+    <p>Linkedin <a href="https://www.linkedin.com/in/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-15819385-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+    </div><!-- /.wrapper -->
+    </body>
+</html>
