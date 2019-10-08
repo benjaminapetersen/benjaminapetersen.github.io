@@ -425,7 +425,12 @@ that refuses to bounce:</p>
 		</span><span class="c">// manually make one</span><span class="x">
         </span><span class="n">BouncyFunc</span><span class="p">(</span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{}),</span><span class="x">
 		</span><span class="c">// call the helper</span><span class="x">
-		</span><span class="n">getBouncyFunc</span><span class="p">(),</span><span class="x">
+        </span><span class="n">getBouncyFunc</span><span class="p">(),</span><span class="x">
+        </span><span class="c">// and a forced bouncer</span><span class="x">
+        </span><span class="n">ForceItToBounce</span><span class="p">{</span><span class="x">
+           </span><span class="n">sits</span><span class="o">:</span><span class="x"> </span><span class="n">DoesntBounce</span><span class="p">{},</span><span class="x">
+        </span><span class="p">}</span><span class="x">
+
 	</span><span class="p">}</span><span class="x">
     </span><span class="n">max</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="nb">len</span><span class="p">(</span><span class="n">bouncers</span><span class="p">)</span><span class="x">
     
@@ -444,13 +449,23 @@ that refuses to bounce:</p>
     </span><span class="n">bouncer</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">GetBouncer</span><span class="p">()</span><span class="x">
     </span><span class="c">// lets get 10 bouncers</span><span class="x">
     </span><span class="k">for</span><span class="x"> </span><span class="n">i</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">0</span><span class="p">;</span><span class="x"> </span><span class="n">i</span><span class="x"> </span><span class="o">&lt;</span><span class="x"> </span><span class="m">10</span><span class="p">;</span><span class="x"> </span><span class="n">i</span><span class="o">++</span><span class="x"> </span><span class="p">{</span><span class="x">
-		</span><span class="n">randBouncingThing</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">bouncer</span><span class="p">()</span><span class="x">
+        </span><span class="n">randBouncingThing</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">bouncer</span><span class="p">()</span><span class="x">
+        </span><span class="c">// and of course see if they bounce :)</span><span class="x">
+        </span><span class="n">randBouncingThing</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+        </span><span class="n">BounceIt</span><span class="p">(</span><span class="n">randBouncingThing</span><span class="p">)</span><span class="x">
 		</span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"%T - %v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">randBouncingThing</span><span class="p">,</span><span class="x"> </span><span class="n">randBouncingThing</span><span class="p">)</span><span class="x">
 	</span><span class="p">}</span><span class="x">
 </span><span class="p">}</span><span class="x">
 </span></code></pre></div></div>
 
 <p>Feel free to give the above a copy paste to <a href="https://play.golang.org/">Go Playground</a>.</p>
+
+<p>Initially, it felt like a huge loss of flexibility to move from 
+JavaScript into Golang.  However, the above proves that Golang can 
+give us quite a bit of flexibility, while also providing type safety.<br />
+I’ve done enough refactoring of Go code now to realize the value of 
+the contracts provided with strict types and interfaces, and have not 
+yet missed too many of the crazy schenanigans of JavaScript.</p>
 
                 </article>
 
@@ -499,8 +514,8 @@ that refuses to bounce:</p>
                      https://disqus.com/admin/universalcode/#configuration-variables
                     */
                     var disqus_config = function () {
-                        this.page.url = /golang-interface-flexibility/;
-                        this.page.identifier = /golang-interface-flexibility;
+                        this.page.url = "/golang-interface-flexibility/";
+                        this.page.identifier = "/golang-interface-flexibility";
                     };
 
                     (function() {
