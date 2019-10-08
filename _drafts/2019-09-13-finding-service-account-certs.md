@@ -6,3 +6,4 @@ tags: today-i-learned kubernetes openshift pods containers
 ---
 
 # Finding Service Account Certs in Kubernetes or OpenShift
+
