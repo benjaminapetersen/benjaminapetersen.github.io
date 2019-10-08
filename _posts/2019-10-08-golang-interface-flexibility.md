@@ -52,19 +52,21 @@ type Person struct {
 And create a `slice` of persons:
 
 ```golang
-people := []Person{{
-    name: "jane",
-    age: 25,
-}, {
-    name: "john",
-    age: 30
-}, {
-    name: "jill",
-    age: 35,
-}, {
-    name: "jeff",
-    age: 40,
-}}
+people := []Person{
+    {
+        name: "jane",
+        age: 25,
+    }, {
+        name: "john",
+        age: 30
+    }, {
+        name: "jill",
+        age: 35,
+    }, {
+        name: "jeff",
+        age: 40,
+    }
+}
 ```
 This is useful, but is nothing like our original `array` in JavaScript. Lets
 add an interface so we can have a `slice` of similar but different objects:

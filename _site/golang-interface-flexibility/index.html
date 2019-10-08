@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>
+    
+        Golang Interface Flexibility - Benjamin A. Petersen | UX Developer in Raleigh, NC
+    
+    </title>
+    <meta name="viewport" content="width=device-width">
+    
+    <meta name="description" content="">
+    
+
+    
+      
+
+
+
+
+
+
+    
+
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+    <link href='http://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/assets/css/reset.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/typography.css">
+    <link rel="stylesheet" href="/assets/css/icons.css">
+    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/bower/pygments/css/monokai.css">
+</head>
+
+  <body>
+    <div class="wrapper">
+
+        <div id="sidebar" class="sidebar">
+    <header>
+        <img
+            src="/assets/img/bap.jpg"
+            class="rounded">
+        <h1 class="slabo27">Benjamin A. Petersen</h1>
+        <p class="slabo27">Senior Software Engineer @ Red Hat working on OpenShift</p>
+
+        <a href="https://github.com/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-github"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/benjaminapetersen"
+           target="_blank">
+            <span class="icon icon-linkedin"></span>
+        </a>
+        <a href="https://twitter.com/bapetersen"
+           target="_blank">
+            <span class="icon icon-twitter3"></span>
+        </a>
+    </header>
+
+    <div id="archive">
+    <!-- archive! -->
+</div>
+
+    
+</div>
+
+
+        <div class="main">
+            <div class="content">
+                <p class="date">
+                    Oct 8, 2019
+                </p>
+                <article>
+                <h1 id="golang-interface-flexibility">Golang Interface Flexibility</h1>
+
+<p>Coming from JavaScript into Golang, I am used to some of the most extreme
+flexibility you can find in programming.  Consider this random snippet:</p>
+
+<pre><code class="language-JavaScript">// yay! an array of anything I could possibly imagine!
+let allTheThings = [{
+    "let's use a string",
+    12345,
+    "and numbers",
+    [1,2,3,4, "welp, and a nested array..."],
+    { name: "andAnObject" },
+    function() { return "why not a func also?" },
+    () =&gt; "and an arrow func",
+    // etc
+}]
+</code></pre>
+
+<p>The value of the above is questionable, it is hard to know what you can do 
+with each of the items in the array.  At best, you have an implicit contract
+somewhere expecting a certain order of components.</p>
+
+<p>In Golang, you have strong typing.  This is valuable, but initially feels 
+limiting.  Your first list (<code class="highlighter-rouge">slice</code> in Golang is the most similar to an 
+<code class="highlighter-rouge">array</code> in JavaScript) may look something like:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">aSetOfThings</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="x">
+    </span><span class="s">"all strings"</span><span class="p">,</span><span class="x">
+    </span><span class="s">"another string"</span><span class="p">,</span><span class="x">
+    </span><span class="s">"i guess i'll just pass strings"</span><span class="p">,</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+<p>Strings is simplistic, however, so let’s collect a set of a custom type:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">Person</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">name</span><span class="x"> </span><span class="kt">string</span><span class="x">
+    </span><span class="n">age</span><span class="x"> </span><span class="kt">int</span><span class="x"> 
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+<p>And create a <code class="highlighter-rouge">slice</code> of persons:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">people</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="n">Person</span><span class="p">{</span><span class="x">
+    </span><span class="p">{</span><span class="x">
+        </span><span class="n">name</span><span class="o">:</span><span class="x"> </span><span class="s">"jane"</span><span class="p">,</span><span class="x">
+        </span><span class="n">age</span><span class="o">:</span><span class="x"> </span><span class="m">25</span><span class="p">,</span><span class="x">
+    </span><span class="p">},</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="n">name</span><span class="o">:</span><span class="x"> </span><span class="s">"john"</span><span class="p">,</span><span class="x">
+        </span><span class="n">age</span><span class="o">:</span><span class="x"> </span><span class="m">30</span><span class="x">
+    </span><span class="p">},</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="n">name</span><span class="o">:</span><span class="x"> </span><span class="s">"jill"</span><span class="p">,</span><span class="x">
+        </span><span class="n">age</span><span class="o">:</span><span class="x"> </span><span class="m">35</span><span class="p">,</span><span class="x">
+    </span><span class="p">},</span><span class="x"> </span><span class="p">{</span><span class="x">
+        </span><span class="n">name</span><span class="o">:</span><span class="x"> </span><span class="s">"jeff"</span><span class="p">,</span><span class="x">
+        </span><span class="n">age</span><span class="o">:</span><span class="x"> </span><span class="m">40</span><span class="p">,</span><span class="x">
+    </span><span class="p">}</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+<p>This is useful, but is nothing like our original <code class="highlighter-rouge">array</code> in JavaScript. Lets
+add an interface so we can have a <code class="highlighter-rouge">slice</code> of similar but different objects:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">Walker</span><span class="x"> </span><span class="k">interface</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">Walk</span><span class="p">()</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="c">// and ensure our Person implements</span><span class="x">
+</span><span class="k">type</span><span class="x"> </span><span class="n">Person</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">name</span><span class="x"> </span><span class="kt">string</span><span class="x">
+    </span><span class="n">age</span><span class="x"> </span><span class="kt">int</span><span class="x"> 
+</span><span class="p">}</span><span class="x">
+</span><span class="k">func</span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="n">Person</span><span class="p">)</span><span class="x"> </span><span class="n">Walk</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Prinf</span><span class="p">(</span><span class="s">"%s is walking</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span><span class="k">func</span><span class="p">(</span><span class="n">p</span><span class="x"> </span><span class="n">Person</span><span class="p">)</span><span class="x"> </span><span class="n">Talk</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Prinf</span><span class="p">(</span><span class="s">"%s is talking</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="c">// and add another struct that implements</span><span class="x">
+</span><span class="k">type</span><span class="x"> </span><span class="n">Dog</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">name</span><span class="x"> </span><span class="kt">string</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span><span class="k">func</span><span class="p">(</span><span class="n">d</span><span class="x"> </span><span class="n">Dog</span><span class="p">)</span><span class="x"> </span><span class="n">Walk</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Prinf</span><span class="p">(</span><span class="s">"%s is walking</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="k">func</span><span class="p">(</span><span class="n">d</span><span class="x"> </span><span class="n">Dog</span><span class="p">)</span><span class="x"> </span><span class="n">Fetch</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="n">fmt</span><span class="o">.</span><span class="n">Prinf</span><span class="p">(</span><span class="s">"%s is fetching</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="c">// and now we can have a slice of walkers, which are different objects,</span><span class="x">
+</span><span class="c">// but comply with the same interface.</span><span class="x">
+</span><span class="n">walkers</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="n">Walker</span><span class="p">{</span><span class="x">
+    </span><span class="n">Person</span><span class="p">{</span><span class="n">name</span><span class="o">:</span><span class="x"> </span><span class="s">"jill"</span><span class="p">,</span><span class="x"> </span><span class="n">age</span><span class="o">:</span><span class="x"> </span><span class="m">35</span><span class="p">},</span><span class="x">
+    </span><span class="n">Dog</span><span class="p">{</span><span class="n">name</span><span class="o">:</span><span class="x"> </span><span class="s">"Fido"</span><span class="p">},</span><span class="x">
+    </span><span class="n">Person</span><span class="p">{</span><span class="n">name</span><span class="o">:</span><span class="x"> </span><span class="s">"jack"</span><span class="p">,</span><span class="x"> </span><span class="n">age</span><span class="o">:</span><span class="x"> </span><span class="m">40</span><span class="p">}</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+<p>Even though the structs are different (<code class="highlighter-rouge">Talk()</code> vs <code class="highlighter-rouge">Fetch()</code>), they both 
+fulfill the interface, so <code class="highlighter-rouge">Golang</code> is happy.</p>
+
+<p>But we can go further.</p>
+
+<p>Lots of things <code class="highlighter-rouge">Bounce</code>, so lets transition to a <code class="highlighter-rouge">Bouncer</code> interface.</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">Bouncer</span><span class="x"> </span><span class="k">interface</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+<p>And lets add a func that takes a <code class="highlighter-rouge">Bouncer</code>:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">BounceIt</span><span class="p">(</span><span class="n">b</span><span class="x"> </span><span class="n">Bouncer</span><span class="p">)</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">b</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+<p>We want to send lots of things to our <code class="highlighter-rouge">BounceIt</code> func.</p>
+
+<p>Now, the first thing that bounces is likely a <code class="highlighter-rouge">Ball</code>:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">Ball</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">Radius</span><span class="x"> </span><span class="kt">int</span><span class="x">
+	</span><span class="n">Material</span><span class="x"> </span><span class="kt">string</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="k">func</span><span class="p">(</span><span class="n">b</span><span class="x"> </span><span class="n">Ball</span><span class="p">)</span><span class="x"> </span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"Bouncing ball %+v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">b</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+<p>We can directly bounce it, or let our bouncer do the bouncing:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Ball</span><span class="p">{}</span><span class="x"> 
+</span><span class="n">b</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="x">
+</span></code></pre></div></div>
+
+<p>Nothing crazy yet.  Now, let’s add an additional bouncing thing, but 
+increase its complexity a bit. The new one will <code class="highlighter-rouge">embed</code> a separate 
+<code class="highlighter-rouge">Bouncer</code>:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">Football</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">Bouncer</span><span class="x">
+	</span><span class="n">Radius</span><span class="x"> </span><span class="kt">int</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+<p>Which we can create by using our original <code class="highlighter-rouge">Ball</code>:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Ball</span><span class="p">{</span><span class="n">Radius</span><span class="o">:</span><span class="x"> </span><span class="m">5</span><span class="p">,</span><span class="x"> </span><span class="n">Material</span><span class="o">:</span><span class="x"> </span><span class="s">"leather"</span><span class="x"> </span><span class="p">}</span><span class="x">
+</span><span class="n">fb</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Football</span><span class="p">{</span><span class="n">Bouncer</span><span class="o">:</span><span class="x"> </span><span class="n">Ball</span><span class="p">{},</span><span class="x"> </span><span class="n">Radius</span><span class="o">:</span><span class="x"> </span><span class="m">5</span><span class="p">}</span><span class="x"> 
+
+</span><span class="n">b</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="n">fb</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="n">fbf</span><span class="o">.</span><span class="n">Bouncer</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="c">// call it either way.</span><span class="x">
+
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="x">
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">fb</span><span class="p">)</span><span class="x">
+</span></code></pre></div></div>
+
+<p>Nothing too crazy here, our new <code class="highlighter-rouge">struct</code> still implements the interface.</p>
+
+<p>Let’s add another <code class="highlighter-rouge">Bouncer</code>, that does something a little bit different:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// embed a pointer to a Ball</span><span class="x">
+</span><span class="k">type</span><span class="x"> </span><span class="n">Soccerball</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="o">*</span><span class="n">Ball</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span><span class="k">func</span><span class="p">(</span><span class="n">sb</span><span class="x"> </span><span class="n">Soccerball</span><span class="p">)</span><span class="x"> </span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"Bouncing ball %+v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">sb</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+<p>This is still fine, the <code class="highlighter-rouge">Interface</code> is a contract, it doesn’t care about 
+the implementation details:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Ball</span><span class="p">{}</span><span class="x"> 
+</span><span class="n">f</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Football</span><span class="p">{</span><span class="n">Ball</span><span class="p">{},</span><span class="x"> </span><span class="m">5</span><span class="p">}</span><span class="x">
+</span><span class="n">sb</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Soccerball</span><span class="p">{</span><span class="o">&amp;</span><span class="n">Ball</span><span class="p">{}}</span><span class="x">
+
+</span><span class="n">b</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="n">f</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="n">f</span><span class="o">.</span><span class="n">Bouncer</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="c">// call it either way.</span><span class="x">
+</span><span class="n">sb</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="n">sb</span><span class="o">.</span><span class="n">Ball</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x"> 
+
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="x">
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="x">
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">sb</span><span class="p">)</span><span class="x">
+</span></code></pre></div></div>
+
+<p>And we might as well add some other things:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// simple, implements Bouncer itself, nothing embedded</span><span class="x">
+</span><span class="k">type</span><span class="x"> </span><span class="n">Jelly</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">Radius</span><span class="x"> </span><span class="kt">int</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="k">func</span><span class="p">(</span><span class="n">j</span><span class="x"> </span><span class="n">Jelly</span><span class="p">)</span><span class="x"> </span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"Bouncing jelly %+v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">j</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="c">// Rabbit method will use a pointer receiver, just to change</span><span class="x">
+</span><span class="c">// things up a little bit more</span><span class="x">
+</span><span class="k">type</span><span class="x"> </span><span class="n">Rabbit</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">Color</span><span class="x"> </span><span class="kt">string</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span><span class="c">// But with a pointer receiver on the method. </span><span class="x">
+</span><span class="c">// still fine because the method signature doesn't change.</span><span class="x">
+</span><span class="k">func</span><span class="p">(</span><span class="n">r</span><span class="x"> </span><span class="o">*</span><span class="n">Rabbit</span><span class="p">)</span><span class="x"> </span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"Bouncing rabbit %+v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">r</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+<p>And usage:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Ball</span><span class="p">{}</span><span class="x"> 
+</span><span class="n">f</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Football</span><span class="p">{</span><span class="n">Ball</span><span class="p">{},</span><span class="x"> </span><span class="m">5</span><span class="p">}</span><span class="x">
+</span><span class="n">sb</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Soccerball</span><span class="p">{</span><span class="o">&amp;</span><span class="n">Ball</span><span class="p">{}}</span><span class="x">
+</span><span class="n">j</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">Jelly</span><span class="p">{}</span><span class="x">
+</span><span class="c">// aha! since the method has a pointer receiver, we need to </span><span class="x">
+</span><span class="c">// take the address of rabbit in order to use it.</span><span class="x">
+</span><span class="n">r</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="o">&amp;</span><span class="n">Rabbit</span><span class="p">{}</span><span class="x">
+
+</span><span class="n">b</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="n">f</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="n">f</span><span class="o">.</span><span class="n">Bouncer</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="c">// call it either way.</span><span class="x">
+</span><span class="n">sb</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="n">sb</span><span class="o">.</span><span class="n">Ball</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x"> 
+</span><span class="n">j</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="n">r</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="x">
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="x">
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">sb</span><span class="p">)</span><span class="x">
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="x">
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="x">
+</span></code></pre></div></div>
+
+<p>Finally, lets get as close as we can to the flexibility of the original
+array example provided in JavaScript.  Let’s add a few non-<code class="highlighter-rouge">struct</code> objects, 
+starting with an <code class="highlighter-rouge">int</code>:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">BouncyInt</span><span class="x"> </span><span class="kt">int</span><span class="x">
+
+</span><span class="k">func</span><span class="p">(</span><span class="n">bi</span><span class="x"> </span><span class="n">BouncyInt</span><span class="p">)</span><span class="x"> </span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"bouncing int? %+v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">bi</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+<p>And instantiate:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// note the different instantiation rules for this one</span><span class="x">
+</span><span class="k">var</span><span class="x"> </span><span class="n">bi</span><span class="x"> </span><span class="n">BouncyInt</span><span class="x">      </span><span class="c">// implicit zero value</span><span class="x">
+</span><span class="n">bi2</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">BouncyInt</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="x">   </span><span class="c">// explicit zero value</span><span class="x">
+</span><span class="n">bi3</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">BouncyInt</span><span class="p">{}</span><span class="x"> </span><span class="c">// NO! BouncyInt is not a struct, despite the methods</span><span class="x">
+
+</span><span class="n">bi</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">bi</span><span class="p">)</span><span class="x">
+</span></code></pre></div></div>
+
+<p>And we might as well have a bouncy func as well:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// we need a type for our func</span><span class="x">
+</span><span class="k">type</span><span class="x"> </span><span class="n">BouncyFunc</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x">
+
+</span><span class="c">// and we can add the methods that will implement the Bouncer interface</span><span class="x">
+</span><span class="k">func</span><span class="p">(</span><span class="n">bf</span><span class="x"> </span><span class="n">BouncyFunc</span><span class="p">)</span><span class="x"> </span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"Bouncing func! %+v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">bf</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+<p>Instantiate:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// need to cast our func</span><span class="x">
+</span><span class="n">f</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">BouncyFunc</span><span class="p">(</span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{})</span><span class="x">
+
+</span><span class="n">f</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="x">
+</span></code></pre></div></div>
+
+<p>And for fun, we might as well make an adapter for this stubborn struct
+that refuses to bounce:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// this won't bounce</span><span class="x">
+</span><span class="k">type</span><span class="x"> </span><span class="n">NotBouncer</span><span class="x"> </span><span class="k">interface</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">Sit</span><span class="p">()</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="c">// and this will impl the NotBouncer interface</span><span class="x">
+</span><span class="k">type</span><span class="x"> </span><span class="n">DoesntBounce</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{}</span><span class="x">
+</span><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">db</span><span class="x"> </span><span class="n">DoesntBounce</span><span class="p">)</span><span class="x"> </span><span class="n">Sit</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"sit, don't bounce %+v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">db</span><span class="p">)</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="c">// this isn't gonna bounce</span><span class="x">
+</span><span class="n">nope</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">DoesntBounce</span><span class="p">{}</span><span class="x">
+
+</span><span class="n">nope</span><span class="o">.</span><span class="n">Sit</span><span class="p">()</span><span class="x">
+</span><span class="n">nope</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="c">// error!</span><span class="x">
+</span></code></pre></div></div>
+<p>Until we wrap it:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">ForceItToBounce</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">Bouncer</span><span class="x">
+	</span><span class="c">// we can embed it and MAKE it bounce</span><span class="x">
+	</span><span class="n">sits</span><span class="x"> </span><span class="n">NotBouncer</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span><span class="c">// well, it still sits, but it will respond to bounce...</span><span class="x">
+</span><span class="k">func</span><span class="x"> </span><span class="p">(</span><span class="n">fitb</span><span class="x"> </span><span class="o">*</span><span class="n">ForceItToBounce</span><span class="p">)</span><span class="x"> </span><span class="n">Bounce</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="n">fitb</span><span class="o">.</span><span class="n">sits</span><span class="o">.</span><span class="n">Sit</span><span class="p">()</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+<p>and:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fitb</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">ForceItToBounce</span><span class="p">{</span><span class="x">
+    </span><span class="n">sits</span><span class="o">:</span><span class="x">    </span><span class="n">DoesntBounce</span><span class="p">{},</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span><span class="n">fitb</span><span class="o">.</span><span class="n">Bounce</span><span class="p">()</span><span class="x">
+</span><span class="c">// note this method was a pointer receiver</span><span class="x">
+</span><span class="n">BounceIt</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fitb</span><span class="p">)</span><span class="x">
+</span></code></pre></div></div>
+
+<p>Finally, might as well implement a <code class="highlighter-rouge">Bouncer</code> generator:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// a helper to make BouncyFuncs</span><span class="x">
+</span><span class="k">func</span><span class="x"> </span><span class="n">getBouncyFunc</span><span class="p">()</span><span class="x"> </span><span class="n">BouncyFunc</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="k">return</span><span class="x"> </span><span class="n">BouncyFunc</span><span class="p">(</span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{})</span><span class="x">
+</span><span class="p">}</span><span class="x">
+
+</span><span class="c">// a func to return a func, will encapsulate our strange list of Bouncers</span><span class="x">
+</span><span class="k">func</span><span class="x"> </span><span class="n">GetBouncer</span><span class="p">()</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="n">Bouncer</span><span class="x"> </span><span class="p">{</span><span class="x">
+	</span><span class="c">// gotta cycle the seed to stir up the randomness</span><span class="x">
+	</span><span class="n">rand</span><span class="o">.</span><span class="n">Seed</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span><span class="o">.</span><span class="n">UnixNano</span><span class="p">())</span><span class="x">
+
+	</span><span class="c">// huh, the BouncingInt can be a bouncer...</span><span class="x">
+	</span><span class="k">var</span><span class="x"> </span><span class="n">bouncingIntegerOfCraziness</span><span class="x"> </span><span class="n">BouncyInt</span><span class="x">
+
+    </span><span class="c">// make a list of things we can return that impl the interface</span><span class="x">
+	</span><span class="n">bouncers</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="p">[]</span><span class="n">Bouncer</span><span class="p">{</span><span class="x">
+        </span><span class="n">Ball</span><span class="p">{},</span><span class="x">
+		</span><span class="n">Soccerball</span><span class="p">{},</span><span class="x">
+		</span><span class="n">Football</span><span class="p">{},</span><span class="x">
+        </span><span class="n">Jelly</span><span class="p">{},</span><span class="x">
+        </span><span class="c">// watch the pointers</span><span class="x">
+        </span><span class="o">&amp;</span><span class="n">Rabbit</span><span class="p">{},</span><span class="x">
+		</span><span class="c">// we proved ints are fine</span><span class="x">
+        </span><span class="n">bouncingIntegerOfCraziness</span><span class="p">,</span><span class="x">
+        </span><span class="c">// another one, inline </span><span class="x">
+        </span><span class="n">BouncyInt</span><span class="p">(</span><span class="m">0</span><span class="p">),</span><span class="x">
+		</span><span class="c">// manually make one</span><span class="x">
+        </span><span class="n">BouncyFunc</span><span class="p">(</span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="p">{}),</span><span class="x">
+		</span><span class="c">// call the helper</span><span class="x">
+		</span><span class="n">getBouncyFunc</span><span class="p">(),</span><span class="x">
+	</span><span class="p">}</span><span class="x">
+    </span><span class="n">max</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="nb">len</span><span class="p">(</span><span class="n">bouncers</span><span class="p">)</span><span class="x">
+    
+	</span><span class="k">return</span><span class="x"> </span><span class="k">func</span><span class="p">()</span><span class="x"> </span><span class="n">Bouncer</span><span class="x"> </span><span class="p">{</span><span class="x">
+		</span><span class="n">random</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">rand</span><span class="o">.</span><span class="n">Intn</span><span class="p">(</span><span class="n">max</span><span class="p">)</span><span class="x">
+		</span><span class="c">// fmt.Printf("%v \n", random)</span><span class="x">
+		</span><span class="k">return</span><span class="x"> </span><span class="n">bouncers</span><span class="p">[</span><span class="n">random</span><span class="p">]</span><span class="x">
+	</span><span class="p">}</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+<p>And then use this thing:</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+    
+    </span><span class="n">bouncer</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">GetBouncer</span><span class="p">()</span><span class="x">
+    </span><span class="c">// lets get 10 bouncers</span><span class="x">
+    </span><span class="k">for</span><span class="x"> </span><span class="n">i</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="m">0</span><span class="p">;</span><span class="x"> </span><span class="n">i</span><span class="x"> </span><span class="o">&lt;</span><span class="x"> </span><span class="m">10</span><span class="p">;</span><span class="x"> </span><span class="n">i</span><span class="o">++</span><span class="x"> </span><span class="p">{</span><span class="x">
+		</span><span class="n">randBouncingThing</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">bouncer</span><span class="p">()</span><span class="x">
+		</span><span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"%T - %v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="x"> </span><span class="n">randBouncingThing</span><span class="p">,</span><span class="x"> </span><span class="n">randBouncingThing</span><span class="p">)</span><span class="x">
+	</span><span class="p">}</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre></div></div>
+
+<p>Feel free to give the above a copy paste to <a href="https://play.golang.org/">Go Playground</a>.</p>
+
+                </article>
+
+                <!-- TODO: http://longqian.me/2017/02/09/github-jekyll-tag/
+                <div class="tags">
+                  
+                    
+                    <a class="tag" href="/tag/golang">
+                      golang
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/go">
+                      go
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/interface">
+                      interface
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/types">
+                      types
+                    </a>
+                  
+                    
+                    <a class="tag" href="/tag/strong-type">
+                      strong-type
+                    </a>
+                  
+                </div>
+                -->
+
+                <div class="backlink">
+                    <p class="back">
+                        <a href="/">back</a>
+                    </p>
+                </div>
+
+                <div class="comments">
+                  <div id="disqus_thread"></div>
+                    <script>
+
+                    /**
+                     https://disqus.com/admin/universalcode/#configuration-variables
+                    */
+                    var disqus_config = function () {
+                        this.page.url = /golang-interface-flexibility/;
+                        this.page.identifier = /golang-interface-flexibility;
+                    };
+
+                    (function() {
+                        var d = document, s = d.createElement('script');
+                        s.src = '//benjaminapetersen-me.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+
+            </div><!-- /.content -->
+        </div><!-- /.main -->
+        <footer class="footer">
+    <p>Github <a href="https://github.com/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+    <p>Twitter <a href="https://twitter.com/bapetersen"
+        target="_blank">bapetersen</a></p>
+    <p>Linkedin <a href="https://www.linkedin.com/in/benjaminapetersen"
+        target="_blank">benjaminapetersen</a></p>
+
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-15819385-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+    </div><!-- /.wrapper -->
+    </body>
+</html>
