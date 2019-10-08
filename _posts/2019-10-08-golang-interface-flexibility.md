@@ -380,7 +380,12 @@ func GetBouncer() func() Bouncer {
 		// manually make one
         BouncyFunc(func() {}),
 		// call the helper
-		getBouncyFunc(),
+        getBouncyFunc(),
+        // and a forced bouncer
+        ForceItToBounce{
+           sits: DoesntBounce{},
+        }
+
 	}
     max := len(bouncers)
     
@@ -400,10 +405,20 @@ func main() {
     bouncer := GetBouncer()
     // lets get 10 bouncers
     for i := 0; i < 10; i++ {
-		randBouncingThing := bouncer()
+        randBouncingThing := bouncer()
+        // and of course see if they bounce :)
+        randBouncingThing.Bounce()
+        BounceIt(randBouncingThing)
 		fmt.Printf("%T - %v\n", randBouncingThing, randBouncingThing)
 	}
 }
 ```
 
 Feel free to give the above a copy paste to [Go Playground](https://play.golang.org/).
+
+Initially, it felt like a huge loss of flexibility to move from 
+JavaScript into Golang.  However, the above proves that Golang can 
+give us quite a bit of flexibility, while also providing type safety.  
+I've done enough refactoring of Go code now to realize the value of 
+the contracts provided with strict types and interfaces, and have not 
+yet missed too many of the crazy schenanigans of JavaScript.
